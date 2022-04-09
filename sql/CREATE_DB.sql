@@ -8,6 +8,12 @@ DROP TABLE IF EXISTS Users;
 -- DROP TABLE IF EXISTS Clients;
 -- DROP TABLE IF EXISTS Addresses;
 -- DROP TABLE IF EXISTS Addresses;
+CREATE TABLE Roles (
+    ID int AUTO_INCREMENT,
+    Title varchar(255),
+    PRIMARY KEY (ID)
+);
+
 CREATE TABLE Users (
     ID int AUTO_INCREMENT,
     Name varchar(255),
@@ -21,11 +27,6 @@ CREATE TABLE Users (
     FOREIGN_KEY (Role_id) REFERENCES Roles(Role_id)
 );
 
--- CREATE TABLE Roles (
---     ID int AUTO_INCREMENT,
---     Title varchar(255),
---     PRIMARY KEY (ID)
--- );
 -- CREATE TABLE Phones (
 --     PhoneID int AUTO_INCREMENT,
 --     PhoneNumber int UNIQUE,

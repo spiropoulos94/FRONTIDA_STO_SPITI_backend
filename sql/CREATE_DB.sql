@@ -24,7 +24,7 @@ CREATE TABLE Users (
     Password varchar(255),
     Role_id int,
     PRIMARY KEY (ID),
-    FOREIGN_KEY (Role_id) REFERENCES Roles(Role_id)
+    FOREIGN_KEY (Role_id) REFERENCES Roles(ID)
 );
 
 -- CREATE TABLE Phones (

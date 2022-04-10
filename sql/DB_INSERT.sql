@@ -63,8 +63,35 @@
 --     ('Prescription', 2),
 --     ('Clinical Examination', 2),
 --     ('Catheteriza', 2);
+-- INSERT INTO
+--     Permissions (Name)
+-- VALUES
+--     ('Read'),
+--     ('Write');
 INSERT INTO
-    Permissions (Name)
+    Patients (
+        Fullname,
+        Patient_AMKA,
+        Health_security,
+        Address_id
+    )
 VALUES
-    ('Read'),
-    ('Write');
+    (
+        'Kwstas Makrakis',
+        '212121',
+        TRUE,
+        1
+    ),
+    (
+        'Panagiwths Stravaleksis',
+        '212123',
+        FALSE,
+        2
+    ),
+    (
+        'Kleomenhs Enas',
+        '212127',
+        TRUE,
+        3
+    ),
+;

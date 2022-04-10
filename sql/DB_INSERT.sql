@@ -31,35 +31,40 @@
 --         '14141414',
 --         7
 --     );
+-- INSERT INTO
+--     Services (Title, Role_id) -- Nurse services 
+-- VALUES
+--     ('Measurement of vital points', 3),
+--     ('Body wash', 3),
+--     ('Local ministration', 3),
+--     ('Intramuscular injections', 3),
+--     ('Sores - Injury treatment', 3),
+--     ('Catheter placement', 3),
+--     ('Enema', 3),
+--     ('Alimentation with Levin', 3),
+--     ('Prescription', 3),
+--     ('Medicine purchase', 3),
+--     ('Medical appointment', 3),
+--     -- Social Worker/ Psychologist
+--     ('Psychological, Social Support', 5),
+--     ('Orientation to elders for their rights', 5),
+--     ('Support contacting the appropriate agency', 5),
+--     ('EFKA medical documentation submission', 5),
+--     -- Family Helper
+--     ('Yard Cleaning', 4),
+--     ('Sweeping/Mopping', 4),
+--     ('Meal preparation', 4),
+--     ('Food Supply', 4),
+--     ('Other', 4),
+--     -- Physiotherapist
+--     ('Physiotherapy', 6),
+--     ('Kinesiotherapy', 6),
+--     -- Doctor
+--     ('Prescription', 2),
+--     ('Clinical Examination', 2),
+--     ('Catheteriza', 2);
 INSERT INTO
-    Services (Title, Role_id) -- Nurse services 
+    Permissions (Name)
 VALUES
-    ('Measurement of vital points', 3),
-    ('Body wash', 3),
-    ('Local ministration', 3),
-    ('Intramuscular injections', 3),
-    ('Sores - Injury treatment', 3),
-    ('Catheter placement', 3),
-    ('Enema', 3),
-    ('Alimentation with Levin', 3),
-    ('Prescription', 3),
-    ('Medicine purchase', 3),
-    ('Medical appointment', 3),
-    -- Social Worker/ Psychologist
-    ('Psychological, Social Support', 5),
-    ('Orientation to elders for their rights', 5),
-    ('Support contacting the appropriate agency', 5),
-    ('EFKA medical documentation submission', 5),
-    -- Family Helper
-    ('Yard Cleaning', 4),
-    ('Sweeping/Mopping', 4),
-    ('Meal preparation', 4),
-    ('Food Supply', 4),
-    ('Other', 4),
-    -- Physiotherapist
-    ('Physiotherapy', 6),
-    ('Kinesiotherapy', 6),
-    -- Doctor
-    ('Prescription', 2),
-    ('Clinical Examination', 2),
-    ('Catheteriza', 2);
+    ('Read'),
+    ('Write');

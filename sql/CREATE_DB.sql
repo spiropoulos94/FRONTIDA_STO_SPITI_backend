@@ -15,7 +15,7 @@ CREATE TABLE Roles (
     PRIMARY KEY (ID)
 );
 
-CREATE TABLE Users (
+CREATE TABLE Clients (
     ID int AUTO_INCREMENT,
     Name varchar(255),
     Surname varchar(255),
@@ -24,8 +24,8 @@ CREATE TABLE Users (
     Email varchar(255),
     Password varchar(255),
     Role_id int,
-    PRIMARY KEY (ID),
-    FOREIGN_KEY (Role_id) REFERENCES Roles(ID)
+    PRIMARY KEY (ClientID),
+    FOREIGN KEY (Role_id) REFERENCES Roles(ID)
 );
 
 -- CREATE TABLE Phones (

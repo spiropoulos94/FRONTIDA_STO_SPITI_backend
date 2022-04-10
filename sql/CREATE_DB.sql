@@ -19,7 +19,7 @@ DROP TABLE IF EXISTS Patients;
 -- DROP TABLE IF EXISTS Addresses;
 CREATE TABLE Roles (
     Role_id int AUTO_INCREMENT,
-    Title varchar(255),
+    Title varchar(255) UNIQUE,
     PRIMARY KEY (Role_id)
 );
 

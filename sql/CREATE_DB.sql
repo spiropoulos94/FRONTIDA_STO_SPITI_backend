@@ -4,9 +4,12 @@ DROP TABLE IF EXISTS Roles;
 
 DROP TABLE IF EXISTS Services;
 
+DROP TABLE IF EXISTS Addresses;
+
 DROP TABLE IF EXISTS Permissions;
 
--- DROP TABLE IF EXISTS Addresses;
+DROP TABLE IF EXISTS Daily_Reports;
+
 -- DROP TABLE IF EXISTS Phones;
 -- DROP TABLE IF EXISTS Clients;
 -- DROP TABLE IF EXISTS Addresses;
@@ -50,6 +53,31 @@ CREATE TABLE Roles_permissions (
     Permission_id int,
     FOREIGN KEY (Role_id) REFERENCES Roles(Role_id),
     FOREIGN KEY (Permission_id) REFERENCES Permissions(Permission_id)
+);
+
+CREATE TABLE Addresses(
+    Address_id int AUTO_INCREMENT,
+    Street varchar(255),
+    Number int,
+    City varchar(255),
+    Postal_code int,
+    PRIMARY KEY (Address_id)
+);
+
+CREATE TABLE Daily_Reports (
+    Report_id int UNIQUE,
+    User_id int NOT NULL,
+    Patient_fullname varchar(255),
+    Patient_AMKA int,
+    Patient_health_security boolean,
+    Patient_address int,
+    Report_Date date,
+    Arrival_Time datetime,
+    Departure_Time datetime,
+    Absence_Status boolean,
+    PRIMARY KEY (Report_id),
+    FOREIGN KEY (User_id) REFERENCES Users(User_id),
+    FOREIGN KEY (Patient_address) REFERENCES Addresses(Address_id)
 );
 
 -- CREATE TABLE RoomCategories (

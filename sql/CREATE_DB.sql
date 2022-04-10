@@ -29,13 +29,15 @@ CREATE TABLE Users (
     FOREIGN KEY (Role_id) REFERENCES Roles(Role_id)
 );
 
--- CREATE TABLE Services (
---     ID int AUTO_INCREMENT,
---     PhoneNumber int UNIQUE,
---     ClientID int,
---     PRIMARY KEY (PhoneID),
---     FOREIGN KEY (ClientID) REFERENCES Clients(ClientID)
--- );
+-- every service belongs to a role/profession 
+CREATE TABLE Services (
+    Service_id int AUTO_INCREMENT,
+    Title varchar(255),
+    Role_id int,
+    PRIMARY KEY (Service_id),
+    FOREIGN KEY (Role_id) REFERENCES Roles(Role_id)
+);
+
 -- CREATE TABLE RoomCategories (
 --     RoomCategoryID int AUTO_INCREMENT,
 --     Name varchar(255) UNIQUE,

@@ -1,3 +1,5 @@
+MAKE DATABASE IF NOT EXISTS `frontidastospiti_db`;
+
 DROP TABLE IF EXISTS Users;
 
 DROP TABLE IF EXISTS Roles;

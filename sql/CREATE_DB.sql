@@ -10,7 +10,10 @@ DROP TABLE IF EXISTS Permissions;
 
 DROP TABLE IF EXISTS Daily_Reports;
 
--- DROP TABLE IF EXISTS Phones;
+DROP TABLE IF EXISTS Reports_services;
+
+DROP TABLE IF EXISTS Patients;
+
 -- DROP TABLE IF EXISTS Clients;
 -- DROP TABLE IF EXISTS Addresses;
 -- DROP TABLE IF EXISTS Addresses;
@@ -64,65 +67,33 @@ CREATE TABLE Addresses(
     PRIMARY KEY (Address_id)
 );
 
+CREATE TABLE Patients (
+    Patient_id int AUTO_INCREMENT,
+    Fullname varchar(255),
+    Patient_AMKA int,
+    Health_security boolean,
+    Address_id int,
+    PRIMARY KEY (Patient_id),
+    FOREIGN KEY (Address_id) REFERENCES Addresses(Address_id)
+);
+
 CREATE TABLE Daily_Reports (
     Report_id int UNIQUE,
     User_id int NOT NULL,
-    Patient_fullname varchar(255),
-    Patient_AMKA int,
-    Patient_health_security boolean,
-    Patient_address int,
-    Report_Date date,
-    Arrival_Time datetime,
-    Departure_Time datetime,
+    Patient_id int,
+    Report_Date_ts int,
+    Arrival_Time_ts int,
+    Departure_Time_ts int,
     Absence_Status boolean,
     PRIMARY KEY (Report_id),
     FOREIGN KEY (User_id) REFERENCES Users(User_id),
-    FOREIGN KEY (Patient_address) REFERENCES Addresses(Address_id)
+    FOREIGN KEY (Patient_id) REFERENCES Patients(Patient_id)
 );
 
--- CREATE TABLE RoomCategories (
---     RoomCategoryID int AUTO_INCREMENT,
---     Name varchar(255) UNIQUE,
---     RoomPrice int,
---     RoomCount int,
---     PRIMARY KEY (RoomCategoryID)
--- );
--- CREATE TABLE Rooms (
---     RoomID int UNIQUE,
---     RoomCategory int NOT NULL,
---     RoomNumber int,
---     FloorNumber int,
---     SquareMeters int,
---     BookTimes int,
---     PRIMARY KEY (RoomID),
---     FOREIGN KEY (RoomCategory) REFERENCES RoomCategories(RoomCategoryID)
--- );
--- ALTER TABLE
---     Rooms
--- ADD
---     CONSTRAINT RoomNumber UNIQUE NONCLUSTERED(RoomNumber, RoomCategory);
--- CREATE TABLE Bookings (
---     BookID int AUTO_INCREMENT,
---     BookInDate DATE,
---     BookOutDate DATE,
---     Bill int,
---     ClientID int,
---     PRIMARY KEY (BookID),
---     FOREIGN KEY (ClientID) REFERENCES Clients(ClientID)
--- );
--- ALTER TABLE
---     Bookings
--- ADD
---     CONSTRAINT ClientID UNIQUE NONCLUSTERED(ClientID, BookInDate, BookOutDate);
--- CREATE TABLE Facilities (
---     FacilityID int AUTO_INCREMENT,
---     Name varchar(255) UNIQUE,
---     DailyPrice int,
---     PRIMARY KEY (FacilityID)
--- );
--- CREATE TABLE Rooms_Facilities (
---     RoomID int,
---     FacilityID int,
---     FOREIGN KEY (RoomID) REFERENCES Rooms(RoomID),
---     FOREIGN KEY (FacilityID) REFERENCES Facilities(FacilityID)
--- );
+CREATE TABLE Reports_services (
+    Report_id int,
+    Service_id int,
+    PRIMARY KEY (Report_id, Service_id),
+    FOREIGN KEY (Report_id) REFERENCES Daily_Reports(Report_id),
+    FOREIGN KEY (Service_id) REFERENCES Services(Service_id)
+);

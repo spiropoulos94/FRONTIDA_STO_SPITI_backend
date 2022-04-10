@@ -2,7 +2,8 @@ DROP TABLE IF EXISTS Users;
 
 DROP TABLE IF EXISTS Roles;
 
--- DROP TABLE IF EXISTS Phones;
+DROP TABLE IF EXISTS Services;
+
 -- DROP TABLE IF EXISTS Clients;
 -- DROP TABLE IF EXISTS Addresses;
 -- DROP TABLE IF EXISTS Phones;
@@ -10,13 +11,13 @@ DROP TABLE IF EXISTS Roles;
 -- DROP TABLE IF EXISTS Addresses;
 -- DROP TABLE IF EXISTS Addresses;
 CREATE TABLE Roles (
-    ID int AUTO_INCREMENT,
+    Role_id int AUTO_INCREMENT,
     Title varchar(255),
-    PRIMARY KEY (ID)
+    PRIMARY KEY (Role_id)
 );
 
-CREATE TABLE Roles (
-    ID int AUTO_INCREMENT,
+CREATE TABLE Users (
+    User_id int AUTO_INCREMENT,
     Name varchar(255),
     Surname varchar(255),
     AFM int NOT NULL UNIQUE,
@@ -24,12 +25,12 @@ CREATE TABLE Roles (
     Email varchar(255),
     Password varchar(255),
     Role_id int,
-    PRIMARY KEY (ID),
-    FOREIGN KEY (Role_id) REFERENCES Roles(ID)
+    PRIMARY KEY (User_id),
+    FOREIGN KEY (Role_id) REFERENCES Roles(Role_id)
 );
 
--- CREATE TABLE Phones (
---     PhoneID int AUTO_INCREMENT,
+-- CREATE TABLE Services (
+--     ID int AUTO_INCREMENT,
 --     PhoneNumber int UNIQUE,
 --     ClientID int,
 --     PRIMARY KEY (PhoneID),

@@ -4,7 +4,8 @@ DROP TABLE IF EXISTS Roles;
 
 DROP TABLE IF EXISTS Services;
 
--- DROP TABLE IF EXISTS Clients;
+DROP TABLE IF EXISTS Permissions;
+
 -- DROP TABLE IF EXISTS Addresses;
 -- DROP TABLE IF EXISTS Phones;
 -- DROP TABLE IF EXISTS Clients;
@@ -36,6 +37,19 @@ CREATE TABLE Services (
     Role_id int,
     PRIMARY KEY (Service_id),
     FOREIGN KEY (Role_id) REFERENCES Roles(Role_id)
+);
+
+CREATE TABLE Permissions (
+    Permission_id int AUTO_INCREMENT,
+    Name varchar(255),
+    PRIMARY KEY (Permission_id)
+);
+
+CREATE TABLE Roles_permissions (
+    Role_id int,
+    Permission_id int,
+    FOREIGN KEY (Role_id) REFERENCES Roles(Role_id),
+    FOREIGN KEY (Permission_id) REFERENCES Permissions(Permission_id)
 );
 
 -- CREATE TABLE RoomCategories (

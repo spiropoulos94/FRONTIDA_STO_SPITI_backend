@@ -81,6 +81,7 @@ CREATE TABLE Daily_Reports (
     Report_id int UNIQUE,
     User_id int NOT NULL,
     Patient_id int,
+    Report_content longtext,
     Report_Date_ts int,
     Arrival_Time_ts int,
     Departure_Time_ts int,

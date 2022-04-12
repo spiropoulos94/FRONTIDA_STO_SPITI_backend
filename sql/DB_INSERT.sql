@@ -63,13 +63,12 @@
 --     ('Prescription', 2),
 --     ('Clinical Examination', 2),
 --     ('Catheteriza', 2);
-INSERT INTO
-    Permissions (Name)
-VALUES
-    ('ADMIN'),
-    ('READ'),
-    ('WRITE');
-
+-- INSERT INTO
+--     Permissions (Name)
+-- VALUES
+--     ('ADMIN'),
+--     ('READ'),
+--     ('WRITE');
 -- INSERT INTO
 --     Patients (
 --         Fullname,

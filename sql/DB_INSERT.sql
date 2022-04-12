@@ -11,7 +11,7 @@
 --     ('Admin'),
 --     ('Doctor'),
 --     ('Nurse'),
---     ('Fmily Helper'),
+--     ('Family Helper'),
 --     ('Social Worker/ Psychologist'),
 --     ('Physiotherapist'),
 --     ('Patient');
@@ -96,3 +96,35 @@
 --         3
 --     ),
 -- ;
+INSERT INTO
+    Reports_permissions (LoggedUserRole, Permission_id, Report_author_id)
+VALUES
+    -- Admin permissions (2:READ, 3:WRITE)
+    (1, 1),
+    ----- doctor permissions
+    (2, 2, 2),
+    (2, 2, 5),
+    (2, 2, 3),
+    (2, 2, 6),
+    ---- family helper permissions
+    (4, 2, 4),
+    (4, 3, 4),
+    ---- Nurse permissions
+    (3, 2, 3),
+    (3, 3, 3),
+    (3, 2, 2),
+    (3, 2, 5),
+    (3, 2, 6),
+    ---- Physiotherapist permissions
+    (6, 2, 6),
+    (6, 3, 6),
+    (6, 2, 5),
+    (6, 2, 3),
+    (6, 2, 2),
+    ---- Social Worker permissions
+    (5, 2, 5),
+    (5, 3, 5),
+    (5, 2, 2),
+    (5, 2, 4),
+    (5, 2, 6),
+    (5, 2, 3);

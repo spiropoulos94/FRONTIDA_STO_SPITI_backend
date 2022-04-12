@@ -1,5 +1,8 @@
+-- check which roles can read or write which author
 SELECT
-    *
+    roles1.Title,
+    perms.Name,
+    roles2.Title
 from
     Reports_permissions rp
     LEFT JOIN Roles roles1 ON rp.LoggedUserRole = roles1.Role_id

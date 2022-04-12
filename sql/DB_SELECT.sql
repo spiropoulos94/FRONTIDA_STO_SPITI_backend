@@ -1,7 +1,7 @@
 SELECT
     *
 from
-    Reports_permissions
-    LEFT JOIN Roles ON Reports_permissions.Permission_id = Roles.Role_id
-    LEFT JOIN Permissions ON Reports_permissions.Permission_id = Permissions.Permission_id
-    LEFT JOIN Roles ON Reports_permissions.Report_author_id = Roles.Role_id;
+    Reports_permissions rp
+    LEFT JOIN Roles roles1 ON rp.LoggedUserRole = roles1.Role_id
+    LEFT JOIN Permissions perms ON rp.Permission_id = perms.Permission_id
+    LEFT JOIN Roles roles2 ON rp.Report_author_id = roles2.Role_id;

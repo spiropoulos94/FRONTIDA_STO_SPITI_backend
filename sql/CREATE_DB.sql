@@ -51,13 +51,6 @@ CREATE TABLE Permissions (
     PRIMARY KEY (Permission_id)
 );
 
-CREATE TABLE Roles_permissions (
-    Role_id int,
-    Permission_id int,
-    FOREIGN KEY (Role_id) REFERENCES Roles(Role_id),
-    FOREIGN KEY (Permission_id) REFERENCES Permissions(Permission_id)
-);
-
 CREATE TABLE Addresses(
     Address_id int AUTO_INCREMENT,
     Street varchar(255),
@@ -98,3 +91,5 @@ CREATE TABLE Reports_services (
     FOREIGN KEY (Report_id) REFERENCES Daily_Reports(Report_id),
     FOREIGN KEY (Service_id) REFERENCES Services(Service_id)
 );
+
+CREATE

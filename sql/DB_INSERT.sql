@@ -100,7 +100,7 @@ INSERT INTO
     Reports_permissions (LoggedUserRole, Permission_id, Report_author_id)
 VALUES
     -- Admin permissions (2:READ, 3:WRITE)
-    (1, 1),
+    -- (1, 1),
     ----- doctor permissions
     (2, 2, 2),
     (2, 2, 5),

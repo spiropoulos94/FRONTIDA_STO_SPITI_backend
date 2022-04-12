@@ -8,7 +8,7 @@ DROP TABLE IF EXISTS Addresses;
 
 DROP TABLE IF EXISTS Permissions;
 
-DROP TABLE IF EXISTS Reports_Permissions;
+DROP TABLE IF EXISTS Permissions;
 
 DROP TABLE IF EXISTS Daily_Reports;
 
@@ -87,7 +87,7 @@ CREATE TABLE Daily_Reports (
 );
 
 CREATE TABLE Reports_services (
-    Report_id int,
+    Report_id int AUTO_INCREMENT,
     Service_id int,
     PRIMARY KEY (Report_id, Service_id),
     FOREIGN KEY (Report_id) REFERENCES Daily_Reports(Report_id),
@@ -95,7 +95,7 @@ CREATE TABLE Reports_services (
 );
 
 CREATE TABLE Reports_permissions (
-    Id int,
+    Id int AUTO_INCREMENT,
     LoggedUserRole int,
     Permission_id int,
     Report_author_id int,

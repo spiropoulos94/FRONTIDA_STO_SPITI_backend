@@ -73,7 +73,7 @@ CREATE TABLE Patients (
 );
 
 CREATE TABLE Daily_Reports (
-    Report_id int UNIQUE,
+    Report_id int AUTO_INCREMENT,
     User_id int NOT NULL,
     Patient_id int,
     Report_content longtext,

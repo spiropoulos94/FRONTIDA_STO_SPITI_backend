@@ -126,3 +126,25 @@ VALUES
     (5, 2, 4),
     (5, 2, 6),
     (5, 2, 3);
+
+-- insert daily report
+INSERT INTO
+    Daily_Reports(
+        User_id,
+        Patient_id,
+        Report_content,
+        Report_date_ts,
+        Arrival_Time_ts,
+        Departure_Time_ts,
+        Absence_Status
+    )
+VALUES
+    (
+        2,
+        2,
+        'Everything went as expected. Will meet again.',
+        1618267056,
+        1618612656,
+        1618616256,
+        FALSE
+    )

@@ -20,4 +20,16 @@ from
     left join Permissions on reports_perms.Permission_id = Permissions.Permission_id
     left join Roles reportAuthors on reports_perms.Report_author_id = reportAuthors.Role_id
 where
-    Reports_perms.LoggedUserRole = 2
+    Reports_perms.LoggedUserRole = 2;
+
+-- select available services for a report
+select
+    Daily_Reports.Report_id,
+    Users.Role_id,
+    Roles.Title,
+    Services.Title
+from
+    Daily_Reports
+    left join Users on Daily_Reports.User_id = Users.User_id
+    left join Roles on Users.Role_id = Roles.Role_id
+    left join Services on Daily_Reports.User_id = Services.Role_id;

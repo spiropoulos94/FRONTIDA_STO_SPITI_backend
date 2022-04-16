@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"fmt"
+	"net/http"
 	"spiropoulos94/FRONTIDA_STO_SPITI_backend/models"
 	"spiropoulos94/FRONTIDA_STO_SPITI_backend/utils"
 
@@ -9,7 +10,7 @@ import (
 )
 
 func ErrorJSON(c *gin.Context, err error) {
-	c.JSON(200, gin.H{
+	c.JSON(http.StatusForbidden, gin.H{
 		"users": err,
 	})
 }

@@ -1,14 +1,10 @@
 package main
 
-import "github.com/gin-gonic/gin"
+import (
+	"spiropoulos94/FRONTIDA_STO_SPITI_backend/utils"
+)
 
 func main() {
-	r := gin.Default()
-	r.GET("/ping", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": "pong",
-		})
-	})
-	r.Run()
+	utils.SetupDatabase()
 
 }

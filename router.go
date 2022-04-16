@@ -8,9 +8,9 @@ import (
 
 func SetupRouter() {
 
-	r := gin.Default()
+	router := gin.Default()
 
-	userGroup := r.Group("/user")
+	userGroup := router.Group("/user")
 	{
 		// user group handlers
 		userGroup.GET("/", controllers.ListUsers)
@@ -19,5 +19,7 @@ func SetupRouter() {
 		// userGroup.DELETE("/:id", controllers.DeleteUser)
 	}
 
-	r.Run()
+	router.POST("/create-user", controllers.CreateUser)
+
+	router.Run()
 }

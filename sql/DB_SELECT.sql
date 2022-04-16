@@ -35,3 +35,9 @@ from
     left join Services on Daily_Reports.User_id = Services.Role_id;
 
 -- select available services for a role
+select
+    Roles.Title,
+    Services.Title
+from
+    Roles
+    left join Services on Roles.Role_id = Services.Role_id;

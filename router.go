@@ -13,7 +13,7 @@ func SetupRouter() {
 	userGroup := r.Group("/user")
 	{
 		// user group handlers
-		userGroup.GET("/", controllers.GetUsers)
+		userGroup.GET("/", controllers.ListUsers)
 		// userGroup.GET("/:id", controllers.FindUser)
 		// userGroup.POST("/", controllers.CreateUser)
 		// userGroup.DELETE("/:id", controllers.DeleteUser)

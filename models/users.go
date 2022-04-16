@@ -7,6 +7,6 @@ type User struct {
 	AFM        int    `json:"AFM"`
 	AMKA       int    `json:"AMKA"`
 	Profession string `json:"Profession"`
-	// Email      string `json:"email"`
-	// Password   string `json:"password"`
+	Email      string `json:"Email"`
+	Password   string `json:"Password"`
 }

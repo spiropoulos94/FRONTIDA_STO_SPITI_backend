@@ -14,12 +14,12 @@ func ErrorJSON(c *gin.Context, err error) {
 	})
 }
 
-func GetUsers(c *gin.Context) {
+func ListUsers(c *gin.Context) {
 	fmt.Println("getting users!")
 
 	var users []models.User
 
-	rows, err := utils.DB.Query("SELECT Users.User_id, Users.Name, Users.Surname, Users.AFM, Users.AMKA, Roles.Title as Profession  FROM `Users` left join Roles on users.Role_id = Roles.Role_id")
+	rows, err := utils.DB.Query("SELECT Users.User_id, Users.Name, Users.Surname, Users.AFM, Users.AMKA, Users.Email, Users.Password,  Roles.Title as Profession  FROM `Users` left join Roles on users.Role_id = Roles.Role_id")
 	if err != nil {
 		fmt.Println("error => ", err)
 		ErrorJSON(c, err)
@@ -28,7 +28,7 @@ func GetUsers(c *gin.Context) {
 	// Loop through rows, using Scan to assign column data to struct fields.
 	for rows.Next() {
 		var user models.User
-		if err := rows.Scan(&user.User_id, &user.Name, &user.Surname, &user.AFM, &user.AMKA, &user.Profession); err != nil {
+		if err := rows.Scan(&user.User_id, &user.Name, &user.Surname, &user.AFM, &user.AMKA, &user.Email, &user.Password, &user.Profession); err != nil {
 			fmt.Println("err", err)
 		}
 		users = append(users, user)

@@ -10,7 +10,7 @@ import (
 	"github.com/joho/godotenv"
 )
 
-var db *sql.DB
+var DB *sql.DB
 
 func SetupDatabase() {
 
@@ -26,12 +26,12 @@ func SetupDatabase() {
 	}
 	// Get a database handle.
 	var err error
-	db, err = sql.Open("mysql", cfg.FormatDSN())
+	DB, err = sql.Open("mysql", cfg.FormatDSN())
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	pingErr := db.Ping()
+	pingErr := DB.Ping()
 	if pingErr != nil {
 		log.Fatal(pingErr)
 	}

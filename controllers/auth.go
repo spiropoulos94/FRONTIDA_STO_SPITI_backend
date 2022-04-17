@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"database/sql"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -13,45 +12,28 @@ import (
 )
 
 func SignUp(c *gin.Context) {
-	fmt.Println("sign up!!")
 	jsonData, _ := ioutil.ReadAll(c.Request.Body)
 	user := models.User{}
 	json.Unmarshal(jsonData, &user)
 
-	fmt.Println(user.User_id)
-
-	userExists, _ := utils.IDexistsInTable("Users", "User_id", user.User_id)
-
-	fmt.Println("user exuist!!!", userExists)
-
-	stmt, err := utils.DB.Prepare("SELECT Users.User_id, Email, Password FROM Users WHERE Users.User_id = ?")
+	userExists, err := utils.IDexistsInTable("Users", "User_id", user.User_id)
 
 	if err != nil {
-		fmt.Println("Error in preparing statement")
+		fmt.Println("Err while checking if id exists")
 		ErrorJSON(c, err.Error())
-		return
 	}
 
-	defer stmt.Close()
-
-	err = stmt.QueryRow(user.User_id).Scan(&user.User_id, &user.Email, &user.Password)
-
+	if !userExists {
+		ErrorJSON(c, "User does not exist in db")
+		return
+	}
+	fmt.Println("mail", user.Email)
 	if user.Email != "" {
-		ErrorJSON(c, "User already exists")
+		ErrorJSON(c, "Cannot complete signup, user already exists")
 		return
 	}
 
-	if err == sql.ErrNoRows {
-		ErrorJSON(c, "User doesn't exist")
-		return
-	} else if err != nil {
-		ErrorJSON(c, err.Error())
-		return
-	}
-
-	fmt.Println("User exists!!")
-
-	updateStmt, err := utils.DB.Prepare("UPDATE Users SET Email = ?, Password = ?	WHERE User_id = ?;")
+	updateStmt, err := utils.DB.Prepare("UPDATE Users SET Email = ?, Password = ? WHERE User_id = ?;")
 
 	if err != nil {
 		fmt.Println("error preparing the update statement")
@@ -61,6 +43,10 @@ func SignUp(c *gin.Context) {
 
 	defer updateStmt.Close()
 
+	if user.Email == "" || user.Password == "" {
+		ErrorJSON(c, "Mail and password are needed")
+		return
+	}
 	res, err := updateStmt.Exec(user.Email, user.Password, user.User_id)
 
 	if err != nil {

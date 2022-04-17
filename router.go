@@ -19,5 +19,7 @@ func SetupRouter() {
 		// userGroup.DELETE("/:id", controllers.DeleteUser)
 	}
 
+	router.POST("/signup", controllers.SignUp)
+
 	router.Run()
 }

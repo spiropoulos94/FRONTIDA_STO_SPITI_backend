@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"database/sql"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -13,18 +14,31 @@ import (
 func SignUp(c *gin.Context) {
 	fmt.Println("sign up!!")
 	jsonData, _ := ioutil.ReadAll(c.Request.Body)
-	newUser := models.User{}
-	json.Unmarshal(jsonData, &newUser)
+	user := models.User{}
+	json.Unmarshal(jsonData, &user)
 
-	fmt.Println(newUser.User_id)
+	fmt.Println(user.User_id)
 
-	stmt, err := utils.DB.Prepare("SELECT * FROM Users WHERE Users.User_id = ?")
+	stmt, err := utils.DB.Prepare("SELECT Users.User_id FROM Users WHERE Users.User_id = ?")
 
 	if err != nil {
-		ErrorJSON(c, err)
+		fmt.Println("Error in preparing statement")
+		ErrorJSON(c, err.Error())
 		return
 	}
 
 	defer stmt.Close()
+
+	err = stmt.QueryRow(user.User_id).Scan(&user.User_id)
+
+	if err == sql.ErrNoRows {
+		ErrorJSON(c, "User doesn't exist")
+		return
+	} else if err != nil {
+		ErrorJSON(c, err.Error())
+		return
+	}
+
+	fmt.Println("User exists!!")
 
 }

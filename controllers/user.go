@@ -1,7 +1,9 @@
 package controllers
 
 import (
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"net/http"
 	"spiropoulos94/FRONTIDA_STO_SPITI_backend/models"
 	"spiropoulos94/FRONTIDA_STO_SPITI_backend/utils"
@@ -45,4 +47,12 @@ func ListUsers(c *gin.Context) {
 	c.JSON(200, gin.H{
 		"users": users,
 	})
+}
+
+func CreateUser(c *gin.Context) {
+	jsonData, _ := ioutil.ReadAll(c.Request.Body)
+	newUser := models.User{}
+	json.Unmarshal(jsonData, &newUser)
+
+	fmt.Println(newUser)
 }

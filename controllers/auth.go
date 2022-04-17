@@ -20,7 +20,7 @@ func SignUp(c *gin.Context) {
 
 	fmt.Println(user.User_id)
 
-	stmt, err := utils.DB.Prepare("SELECT Users.User_id FROM Users WHERE Users.User_id = ?")
+	stmt, err := utils.DB.Prepare("SELECT Users.User_id, Email, Password FROM Users WHERE Users.User_id = ?")
 
 	if err != nil {
 		fmt.Println("Error in preparing statement")
@@ -30,7 +30,12 @@ func SignUp(c *gin.Context) {
 
 	defer stmt.Close()
 
-	err = stmt.QueryRow(user.User_id).Scan(&user.User_id)
+	err = stmt.QueryRow(user.User_id).Scan(&user.User_id, &user.Email, &user.Password)
+
+	if user.Email != "" {
+		ErrorJSON(c, "User already exists")
+		return
+	}
 
 	if err == sql.ErrNoRows {
 		ErrorJSON(c, "User doesn't exist")
@@ -42,7 +47,7 @@ func SignUp(c *gin.Context) {
 
 	fmt.Println("User exists!!")
 
-	updateStmt, err := utils.DB.Prepare("UPDATE Users SET Email = ?, Password = ?,	WHERE User_id = ?")
+	updateStmt, err := utils.DB.Prepare("UPDATE Users SET Email = ?, Password = ?	WHERE User_id = ?;")
 
 	if err != nil {
 		fmt.Println("error preparing the update statement")

@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"spiropoulos94/FRONTIDA_STO_SPITI_backend/models"
 	"spiropoulos94/FRONTIDA_STO_SPITI_backend/utils"
@@ -50,9 +51,30 @@ func ListUsers(c *gin.Context) {
 }
 
 func CreateUser(c *gin.Context) {
+	fmt.Println("CREATING USER")
 	jsonData, _ := ioutil.ReadAll(c.Request.Body)
 	newUser := models.User{}
 	json.Unmarshal(jsonData, &newUser)
 
+	fmt.Println("jsonData")
+	fmt.Println(string(jsonData))
+
 	fmt.Println(newUser)
+
+	stmt, err := utils.DB.Prepare("INSERT INTO Users( Name, Surname, AFM, AMKA, Role_id) VALUES( ?, ?, ?, ?, ? )")
+	if err != nil {
+		log.Fatal(err)
+		ErrorJSON(c, err)
+	}
+
+	defer stmt.Close()
+
+	res, err := stmt.Exec(newUser.Name, newUser.Surname, newUser.AFM, newUser.AMKA, newUser.Profession.Role_id)
+
+	if err != nil {
+		ErrorJSON(c, err)
+	}
+
+	fmt.Println(res.RowsAffected())
+
 }

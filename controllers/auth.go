@@ -26,6 +26,8 @@ func SignUp(c *gin.Context) {
 	if !userExists {
 		ErrorJSON(c, "User does not exist in db")
 		return
+	} else {
+		// checkare edw an o user sto table exei mail kai passwprd
 	}
 
 	updateStmt, err := utils.DB.Prepare("UPDATE Users SET Email = ?, Password = ? WHERE User_id = ?;")

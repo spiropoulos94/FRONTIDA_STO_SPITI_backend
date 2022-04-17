@@ -29,7 +29,7 @@ func SignUp(c *gin.Context) {
 	}
 	fmt.Println("mail", user.Email)
 	if user.Email != "" {
-		ErrorJSON(c, "Cannot complete signup, user already exists")
+		ErrorJSON(c, "Cannot complete signup, user already has entered a mail address")
 		return
 	}
 

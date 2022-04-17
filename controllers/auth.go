@@ -27,11 +27,6 @@ func SignUp(c *gin.Context) {
 		ErrorJSON(c, "User does not exist in db")
 		return
 	}
-	fmt.Println("mail", user.Email)
-	if user.Email != "" {
-		ErrorJSON(c, "Cannot complete signup, user already has entered a mail address")
-		return
-	}
 
 	updateStmt, err := utils.DB.Prepare("UPDATE Users SET Email = ?, Password = ? WHERE User_id = ?;")
 

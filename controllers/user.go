@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"spiropoulos94/FRONTIDA_STO_SPITI_backend/models"
 	"spiropoulos94/FRONTIDA_STO_SPITI_backend/utils"
@@ -12,9 +11,9 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func ErrorJSON(c *gin.Context, err error) {
+func ErrorJSON(c *gin.Context, err interface{}) {
 	c.JSON(http.StatusForbidden, gin.H{
-		"users": err,
+		"err": err,
 	})
 }
 
@@ -51,30 +50,38 @@ func ListUsers(c *gin.Context) {
 }
 
 func CreateUser(c *gin.Context) {
-	fmt.Println("CREATING USER")
 	jsonData, _ := ioutil.ReadAll(c.Request.Body)
 	newUser := models.User{}
 	json.Unmarshal(jsonData, &newUser)
 
-	fmt.Println("jsonData")
-	fmt.Println(string(jsonData))
-
-	fmt.Println(newUser)
-
 	stmt, err := utils.DB.Prepare("INSERT INTO Users( Name, Surname, AFM, AMKA, Role_id) VALUES( ?, ?, ?, ?, ? )")
 	if err != nil {
-		log.Fatal(err)
 		ErrorJSON(c, err)
+		return
 	}
 
 	defer stmt.Close()
 
 	res, err := stmt.Exec(newUser.Name, newUser.Surname, newUser.AFM, newUser.AMKA, newUser.Profession.Role_id)
 
-	if err != nil {
-		ErrorJSON(c, err)
+	if newUser.AFM == 0 || newUser.AMKA == 0 {
+		ErrorJSON(c, "AFM and AMKA is needed ")
+		return
 	}
 
-	fmt.Println(res.RowsAffected())
+	if err != nil {
+		ErrorJSON(c, err)
+		return
+	}
+
+	if number, err := res.RowsAffected(); err != nil {
+		ErrorJSON(c, err)
+	} else {
+
+		c.JSON(http.StatusOK, gin.H{
+			"rows affected": number,
+			"message":       "User added",
+		})
+	}
 
 }

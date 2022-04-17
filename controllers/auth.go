@@ -28,6 +28,19 @@ func SignUp(c *gin.Context) {
 		return
 	} else {
 		// checkare edw an o user sto table exei mail kai passwprd
+		var dbUser models.User
+		stmt, err := utils.DB.Prepare("SELECT Email, Password FROM Users WHERE Users.User_id = ? ;")
+		if err != nil {
+			fmt.Println("err while preparing stmt", err)
+		}
+
+		stmt.QueryRow(user.User_id).Scan(&dbUser.Email)
+
+		if dbUser.Email != "" {
+			ErrorJSON(c, "User has already been assigned a mail")
+			return
+		}
+
 	}
 
 	updateStmt, err := utils.DB.Prepare("UPDATE Users SET Email = ?, Password = ? WHERE User_id = ?;")

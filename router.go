@@ -15,7 +15,7 @@ func SetupRouter() {
 		// user group handlers
 		userGroup.GET("/", controllers.ListUsers)
 		// userGroup.GET("/:id", controllers.FindUser)
-		userGroup.POST("/", controllers.AdminCreateUser)
+		userGroup.POST("/admin-create", controllers.AdminCreateUser)
 		// userGroup.DELETE("/:id", controllers.DeleteUser)
 	}
 

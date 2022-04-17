@@ -64,8 +64,8 @@ func CreateUser(c *gin.Context) {
 
 	res, err := stmt.Exec(newUser.Name, newUser.Surname, newUser.AFM, newUser.AMKA, newUser.Profession.Role_id)
 
-	if newUser.AFM == 0 || newUser.AMKA == 0 {
-		ErrorJSON(c, "AFM and AMKA is needed ")
+	if newUser.AFM == 0 || newUser.AMKA == 0 || newUser.Profession.Role_id == 0 {
+		ErrorJSON(c, "AFM and AMKA  and Role_id is needed ")
 		return
 	}
 

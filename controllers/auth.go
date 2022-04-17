@@ -27,9 +27,8 @@ func SignUp(c *gin.Context) {
 		ErrorJSON(c, "User does not exist in db")
 		return
 	} else {
-		// checkare edw an o user sto table exei mail kai passwprd
 		var dbUser models.User
-		stmt, err := utils.DB.Prepare("SELECT Email, Password FROM Users WHERE Users.User_id = ? ;")
+		stmt, err := utils.DB.Prepare("SELECT Email FROM Users WHERE Users.User_id = ? ;")
 		if err != nil {
 			fmt.Println("err while preparing stmt", err)
 		}

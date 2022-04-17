@@ -19,7 +19,5 @@ func SetupRouter() {
 		// userGroup.DELETE("/:id", controllers.DeleteUser)
 	}
 
-	router.POST("/create-user", controllers.CreateUser)
-
 	router.Run()
 }

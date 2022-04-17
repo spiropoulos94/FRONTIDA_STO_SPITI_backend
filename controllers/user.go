@@ -49,7 +49,7 @@ func ListUsers(c *gin.Context) {
 	})
 }
 
-func CreateUser(c *gin.Context) {
+func AdminCreateUser(c *gin.Context) {
 	jsonData, _ := ioutil.ReadAll(c.Request.Body)
 	newUser := models.User{}
 	json.Unmarshal(jsonData, &newUser)

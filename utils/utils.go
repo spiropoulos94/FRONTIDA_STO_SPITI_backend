@@ -1,14 +1,15 @@
 package utils
 
 import (
+	"database/sql"
 	"fmt"
 )
 
 //d arithmos, s string
 
-func ID_exists(idColumn string, idVal int, table string) (bool, error) {
+func IDexistsInTable(table string, idColumn string, idVal int) (bool, error) {
 
-	query := fmt.Sprintf("SELECT %s.%s FROM %s WHERE %s.%s = %d ;", table, idVal, table, table, idColumn, idVal)
+	query := fmt.Sprintf("SELECT %s.%s FROM %s WHERE %s.%s = ? ;", table, idColumn, table, table, idColumn)
 
 	fmt.Println("query =>", query)
 
@@ -20,5 +21,18 @@ func ID_exists(idColumn string, idVal int, table string) (bool, error) {
 	}
 
 	defer stmt.Close()
+
+	var id int
+	err = stmt.QueryRow(idVal).Scan(&id)
+
+	if err == sql.ErrNoRows {
+		fmt.Println("No Rows for id", err)
+		return false, nil
+	} else if err != nil {
+		fmt.Println("Error", err)
+		return false, err
+	} else {
+		return true, nil
+	}
 
 }

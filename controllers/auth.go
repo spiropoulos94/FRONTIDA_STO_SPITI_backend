@@ -20,6 +20,10 @@ func SignUp(c *gin.Context) {
 
 	fmt.Println(user.User_id)
 
+	userExists, _ := utils.IDexistsInTable("Users", "User_id", user.User_id)
+
+	fmt.Println("user exuist!!!", userExists)
+
 	stmt, err := utils.DB.Prepare("SELECT Users.User_id, Email, Password FROM Users WHERE Users.User_id = ?")
 
 	if err != nil {

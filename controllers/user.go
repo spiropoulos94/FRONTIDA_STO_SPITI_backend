@@ -13,7 +13,7 @@ import (
 
 func ErrorJSON(c *gin.Context, err interface{}) {
 	c.JSON(http.StatusForbidden, gin.H{
-		"err": err,
+		"error": err,
 	})
 }
 

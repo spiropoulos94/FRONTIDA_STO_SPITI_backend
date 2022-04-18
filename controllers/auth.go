@@ -66,6 +66,9 @@ func SignUp(c *gin.Context) {
 
 	rowsAffected, _ := res.RowsAffected()
 
+	// TODO: kwdikos na apothikeyetai hashed
+	// TODO: na epistrefei jwt token
+
 	c.JSON(http.StatusOK, gin.H{
 		"message":       "User updated successfully",
 		"rows affected": rowsAffected,

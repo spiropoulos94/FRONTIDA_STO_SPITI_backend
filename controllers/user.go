@@ -25,7 +25,7 @@ func ListUsers(c *gin.Context) {
 	rows, err := utils.DB.Query("SELECT Users.User_id, Users.Name, Users.Surname, Users.AFM, Users.AMKA,  Roles.Title , Roles.Role_id  FROM `Users` left join Roles on users.Role_id = Roles.Role_id")
 	if err != nil {
 		fmt.Println("error => ", err)
-		ErrorJSON(c, err)
+		ErrorJSON(c, err.Error())
 	}
 	defer rows.Close()
 	// Loop through rows, using Scan to assign column data to struct fields.
@@ -42,7 +42,7 @@ func ListUsers(c *gin.Context) {
 	}
 	if err := rows.Err(); err != nil {
 		fmt.Println("err", err)
-		ErrorJSON(c, err)
+		ErrorJSON(c, err.Error())
 	}
 
 	c.JSON(200, gin.H{
@@ -62,7 +62,7 @@ func AdminCreateUser(c *gin.Context) {
 
 	stmt, err := utils.DB.Prepare("INSERT INTO Users( Name, Surname, AFM, AMKA, Role_id) VALUES( ?, ?, ?, ?, ? )")
 	if err != nil {
-		ErrorJSON(c, err)
+		ErrorJSON(c, err.Error())
 		return
 	}
 
@@ -71,12 +71,12 @@ func AdminCreateUser(c *gin.Context) {
 	res, err := stmt.Exec(newUser.Name, newUser.Surname, newUser.AFM, newUser.AMKA, newUser.Profession.Role_id)
 
 	if err != nil {
-		ErrorJSON(c, err)
+		ErrorJSON(c, err.Error())
 		return
 	}
 
 	if number, err := res.RowsAffected(); err != nil {
-		ErrorJSON(c, err)
+		ErrorJSON(c, err.Error())
 	} else {
 
 		c.JSON(http.StatusOK, gin.H{

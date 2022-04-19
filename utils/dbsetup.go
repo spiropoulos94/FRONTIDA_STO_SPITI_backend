@@ -21,7 +21,7 @@ func SetupDatabase() {
 		Passwd:               os.Getenv("DB_PASSWORD"),
 		Net:                  "tcp",
 		Addr:                 "127.0.0.1:3306",
-		DBName:               "frondidastospiti_db",
+		DBName:               os.Getenv("DB_NAME"),
 		AllowNativePasswords: true,
 	}
 	// Get a database handle.

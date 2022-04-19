@@ -112,7 +112,15 @@ func SignUp(c *gin.Context) {
 		ErrorJSON(c, "Mail and password are needed")
 		return
 	}
-	res, err := updateStmt.Exec(user.Email, user.Password, user.User_id)
+
+	hashedPassword, err := utils.HashPassword(user.Password)
+
+	if err != nil {
+		fmt.Println("Error while hashing password")
+		ErrorJSON(c, err.Error())
+	}
+
+	res, err := updateStmt.Exec(user.Email, hashedPassword, user.User_id)
 
 	if err != nil {
 		fmt.Println("error while executing statement")

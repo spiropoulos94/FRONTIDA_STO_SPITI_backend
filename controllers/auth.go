@@ -125,9 +125,17 @@ func SignUp(c *gin.Context) {
 	// TODO: kwdikos na apothikeyetai hashed
 	// TODO: na epistrefei jwt token
 
+	token, err := NewToken(user)
+
+	if err != nil {
+		fmt.Println("error while making token")
+		ErrorJSON(c, err.Error())
+	}
+
 	c.JSON(http.StatusOK, gin.H{
-		"message":       "User updated successfully",
+		"message":       "User signup complete!",
 		"rows affected": rowsAffected,
+		"token":         token,
 	})
 
 }

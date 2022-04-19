@@ -35,6 +35,7 @@ func ListUsers(c *gin.Context) {
 
 		if err := rows.Scan(&user.User_id, &user.Name, &user.Surname, &user.AFM, &user.AMKA, &profession.Title, &profession.Role_id); err != nil {
 			fmt.Println("err", err)
+			ErrorJSON(c, err.Error())
 		}
 		user.Profession = profession
 		users = append(users, user)
@@ -54,6 +55,11 @@ func AdminCreateUser(c *gin.Context) {
 	newUser := models.User{}
 	json.Unmarshal(jsonData, &newUser)
 
+	if newUser.AFM == 0 || newUser.AMKA == 0 || newUser.Profession.Role_id == 0 {
+		ErrorJSON(c, "AFM and AMKA  and Role_id is needed ")
+		return
+	}
+
 	stmt, err := utils.DB.Prepare("INSERT INTO Users( Name, Surname, AFM, AMKA, Role_id) VALUES( ?, ?, ?, ?, ? )")
 	if err != nil {
 		ErrorJSON(c, err)
@@ -63,11 +69,6 @@ func AdminCreateUser(c *gin.Context) {
 	defer stmt.Close()
 
 	res, err := stmt.Exec(newUser.Name, newUser.Surname, newUser.AFM, newUser.AMKA, newUser.Profession.Role_id)
-
-	if newUser.AFM == 0 || newUser.AMKA == 0 || newUser.Profession.Role_id == 0 {
-		ErrorJSON(c, "AFM and AMKA  and Role_id is needed ")
-		return
-	}
 
 	if err != nil {
 		ErrorJSON(c, err)

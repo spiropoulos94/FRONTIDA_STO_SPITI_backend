@@ -75,3 +75,7 @@ func SignUp(c *gin.Context) {
 	})
 
 }
+
+func Login(c *gin.Context) {
+	fmt.Println("user logs in")
+}

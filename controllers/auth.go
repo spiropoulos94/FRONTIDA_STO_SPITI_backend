@@ -198,6 +198,8 @@ func Login(c *gin.Context) {
 	} else {
 		fmt.Println("password ok")
 
+		reqBodyUser.Password = ""
+
 		token, err := NewToken(reqBodyUser)
 
 		if err != nil {

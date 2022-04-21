@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"database/sql"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -8,6 +9,7 @@ import (
 	"os"
 	"spiropoulos94/FRONTIDA_STO_SPITI_backend/models"
 	"spiropoulos94/FRONTIDA_STO_SPITI_backend/utils"
+	"strings"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -130,8 +132,9 @@ func SignUp(c *gin.Context) {
 
 	rowsAffected, _ := res.RowsAffected()
 
-	// TODO: kwdikos na apothikeyetai hashed
-	// TODO: na epistrefei jwt token
+	// edw vgale to pass apo to user struct
+
+	user.Password = ""
 
 	token, err := NewToken(user)
 
@@ -149,5 +152,45 @@ func SignUp(c *gin.Context) {
 }
 
 func Login(c *gin.Context) {
-	fmt.Println("user logs in")
+
+	jsonData, _ := ioutil.ReadAll(c.Request.Body)
+	reqBodyUser := models.User{}
+	json.Unmarshal(jsonData, &reqBodyUser)
+
+	fmt.Println(reqBodyUser.Email)
+	fmt.Println(reqBodyUser.Password)
+
+	if strings.TrimSpace(reqBodyUser.Email) == "" || strings.TrimSpace(reqBodyUser.Password) == "" {
+		ErrorJSON(c, "Mail and password are needed")
+		return
+	}
+
+	stmt, err := utils.DB.Prepare("Select Email, Password from Users WHERE Email = ? ;")
+	if err != nil {
+		ErrorJSON(c, err.Error())
+	}
+
+	defer stmt.Close()
+
+	var email string
+	var password string
+
+	err = stmt.QueryRow(reqBodyUser.Email).Scan(&email, &password)
+
+	if err == sql.ErrNoRows {
+		fmt.Println("No Rows for id", err)
+		ErrorJSON(c, "User does not exist")
+
+	} else if err != nil {
+		fmt.Println("Error", err)
+		ErrorJSON(c, err.Error())
+	}
+
+	if !utils.CheckPasswordHash(reqBodyUser.Password, password) {
+		fmt.Println("wrong password")
+		ErrorJSON(c, "Wrong password")
+	} else {
+		fmt.Println("password ok")
+	}
+
 }

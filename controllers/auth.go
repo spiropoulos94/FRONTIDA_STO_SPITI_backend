@@ -165,32 +165,50 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	stmt, err := utils.DB.Prepare("Select Email, Password from Users WHERE Email = ? ;")
+	stmt, err := utils.DB.Prepare("Select Email, Password, User_id, Role_id from Users WHERE Email = ? ;")
 	if err != nil {
 		ErrorJSON(c, err.Error())
+		return
 	}
 
 	defer stmt.Close()
 
-	var email string
-	var password string
+	var dbUser models.User
+	var dbUserProfession models.Profession
 
-	err = stmt.QueryRow(reqBodyUser.Email).Scan(&email, &password)
+	err = stmt.QueryRow(reqBodyUser.Email).Scan(&dbUser.Email, &dbUser.Password, &dbUser.User_id, &dbUserProfession.Role_id)
+
+	reqBodyUser.Profession = dbUserProfession
 
 	if err == sql.ErrNoRows {
 		fmt.Println("No Rows for id", err)
 		ErrorJSON(c, "User does not exist")
+		return
 
 	} else if err != nil {
 		fmt.Println("Error", err)
 		ErrorJSON(c, err.Error())
+		return
 	}
 
-	if !utils.CheckPasswordHash(reqBodyUser.Password, password) {
+	if !utils.CheckPasswordHash(reqBodyUser.Password, dbUser.Password) {
 		fmt.Println("wrong password")
 		ErrorJSON(c, "Wrong password")
+		return
 	} else {
 		fmt.Println("password ok")
+
+		token, err := NewToken(reqBodyUser)
+
+		if err != nil {
+			ErrorJSON(c, err.Error())
+			return
+		}
+
+		c.JSON(http.StatusOK, gin.H{
+			"message": "user logged in successfuly",
+			"token":   token,
+		})
 	}
 
 }

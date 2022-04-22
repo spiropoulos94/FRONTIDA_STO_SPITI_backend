@@ -20,6 +20,17 @@ func ErrorJSON(c *gin.Context, err interface{}) {
 func ListUsers(c *gin.Context) {
 	fmt.Println("getting users!")
 
+	userId, exist := c.Get("User_id")
+
+	if exist {
+		fmt.Println("User id", userId)
+	}
+	userRoleId, exist := c.Get("User_Role_id")
+
+	if exist {
+		fmt.Println("Role id", userRoleId)
+	}
+
 	var users []models.User
 
 	rows, err := utils.DB.Query("SELECT Users.User_id, Users.Name, Users.Surname, Users.AFM, Users.AMKA,  Roles.Title , Roles.Role_id  FROM `Users` left join Roles on users.Role_id = Roles.Role_id")

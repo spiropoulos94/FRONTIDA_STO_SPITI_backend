@@ -10,7 +10,7 @@ func SetupRouter() {
 
 	router := gin.Default()
 
-	userGroup := router.Group("/user")
+	userGroup := router.Group("/user", CheckHeaderForJWT())
 	{
 		// user group handlers
 		userGroup.GET("/", controllers.ListUsers)

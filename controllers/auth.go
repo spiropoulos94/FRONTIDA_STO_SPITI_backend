@@ -56,14 +56,8 @@ func ParseToken(token_string string, c *gin.Context) (*Claims, error) {
 	})
 
 	if err != nil {
-		fmt.Println(err.Error())
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error":   err.Error(),
-			"message": "Could not validate token",
-		})
 
-		c.Abort()
-		return nil, nil
+		return nil, err
 	}
 
 	return claims, nil
@@ -71,27 +65,36 @@ func ParseToken(token_string string, c *gin.Context) (*Claims, error) {
 
 func SignUp(c *gin.Context) {
 	jsonData, _ := ioutil.ReadAll(c.Request.Body)
-	user := models.User{}
-	json.Unmarshal(jsonData, &user)
+	reqBodyUser := models.User{}
+	json.Unmarshal(jsonData, &reqBodyUser)
 
-	userExists, err := utils.IDexistsInTable("Users", "User_id", user.User_id)
+	if reqBodyUser.Email == "" || reqBodyUser.Password == "" || reqBodyUser.User_id == 0 {
+		ErrorJSON(c, "Email and Password & User_id are needed")
+		return
+	}
+
+	userExists, err := utils.IDexistsInTable("Users", "User_id", reqBodyUser.User_id)
 
 	if err != nil {
 		fmt.Println("Err while checking if id exists")
 		ErrorJSON(c, err.Error())
+		return
 	}
+
+	var dbUser models.User
 
 	if !userExists {
 		ErrorJSON(c, "User does not exist in db")
 		return
 	} else {
-		var dbUser models.User
 		stmt, err := utils.DB.Prepare("SELECT Email FROM Users WHERE Users.User_id = ? ;")
 		if err != nil {
 			fmt.Println("err while preparing stmt", err.Error())
 		}
 
-		stmt.QueryRow(user.User_id).Scan(&dbUser.Email)
+		defer stmt.Close()
+
+		stmt.QueryRow(reqBodyUser.User_id).Scan(&dbUser.Email)
 
 		if dbUser.Email != "" {
 			ErrorJSON(c, "User has already been assigned a mail")
@@ -110,19 +113,15 @@ func SignUp(c *gin.Context) {
 
 	defer updateStmt.Close()
 
-	if user.Email == "" || user.Password == "" {
-		ErrorJSON(c, "Mail and password are needed")
-		return
-	}
-
-	hashedPassword, err := utils.HashPassword(user.Password)
+	hashedPassword, err := utils.HashPassword(reqBodyUser.Password)
 
 	if err != nil {
 		fmt.Println("Error while hashing password")
 		ErrorJSON(c, err.Error())
+		return
 	}
 
-	res, err := updateStmt.Exec(user.Email, hashedPassword, user.User_id)
+	res, err := updateStmt.Exec(reqBodyUser.Email, hashedPassword, reqBodyUser.User_id)
 
 	if err != nil {
 		fmt.Println("error while executing statement")
@@ -132,11 +131,21 @@ func SignUp(c *gin.Context) {
 
 	rowsAffected, _ := res.RowsAffected()
 
-	// edw vgale to pass apo to user struct
+	stmt, err := utils.DB.Prepare("SELECT User_id, Role_id FROM Users WHERE User_id = ? ;")
 
-	user.Password = ""
+	if err != nil {
+		ErrorJSON(c, err.Error())
+		return
+	}
 
-	token, err := NewToken(user)
+	err = stmt.QueryRow(reqBodyUser.User_id).Scan(&dbUser.User_id, &dbUser.Profession.Role_id)
+
+	if err != nil {
+		ErrorJSON(c, err.Error())
+		return
+	}
+
+	token, err := NewToken(dbUser)
 
 	if err != nil {
 		fmt.Println("error while making token")
@@ -157,9 +166,6 @@ func Login(c *gin.Context) {
 	reqBodyUser := models.User{}
 	json.Unmarshal(jsonData, &reqBodyUser)
 
-	fmt.Println(reqBodyUser.Email)
-	fmt.Println(reqBodyUser.Password)
-
 	if strings.TrimSpace(reqBodyUser.Email) == "" || strings.TrimSpace(reqBodyUser.Password) == "" {
 		ErrorJSON(c, "Mail and password are needed")
 		return
@@ -178,7 +184,7 @@ func Login(c *gin.Context) {
 
 	err = stmt.QueryRow(reqBodyUser.Email).Scan(&dbUser.Email, &dbUser.Password, &dbUser.User_id, &dbUserProfession.Role_id)
 
-	reqBodyUser.Profession = dbUserProfession
+	dbUser.Profession = dbUserProfession
 
 	if err == sql.ErrNoRows {
 		fmt.Println("No Rows for id", err)
@@ -198,9 +204,9 @@ func Login(c *gin.Context) {
 	} else {
 		fmt.Println("password ok")
 
-		reqBodyUser.Password = ""
+		dbUser.Password = ""
 
-		token, err := NewToken(reqBodyUser)
+		token, err := NewToken(dbUser)
 
 		if err != nil {
 			ErrorJSON(c, err.Error())

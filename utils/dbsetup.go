@@ -12,6 +12,28 @@ import (
 
 var DB *sql.DB
 
+func InsertAdminAccount() {
+	fmt.Println("insert admin account runs")
+	//delete admin account if exists and make a new one
+	query := "SELECT Users.User_id from Users WHERE Email = 'dev@dev.gr';"
+
+	var id int
+
+	err := DB.QueryRow(query).Scan(&id)
+
+	if err == sql.ErrNoRows {
+		fmt.Println("No admin account found", err)
+		return
+	} else if err != nil {
+		fmt.Println("Error : ", err)
+		return
+	} else {
+		fmt.Println("admin account found in database")
+		return
+	}
+
+}
+
 func SetupDatabase() {
 
 	godotenv.Load(".env")
@@ -36,5 +58,7 @@ func SetupDatabase() {
 		log.Fatal(pingErr)
 	}
 	fmt.Println("Connected!")
+
+	InsertAdminAccount()
 
 }

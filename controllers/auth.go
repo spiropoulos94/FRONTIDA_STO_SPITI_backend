@@ -168,7 +168,7 @@ func Login(c *gin.Context) {
 	json.Unmarshal(jsonData, &reqBodyUser)
 
 	// for development purposes, admin always passes and get jwt
-	environment := os.Getenv("DB_PASSWORD")
+	environment := os.Getenv("ENVIRONMENT")
 	if reqBodyUser.Email == "dev@dev.gr" && environment == "dev" {
 		fmt.Println("dev logged in ")
 

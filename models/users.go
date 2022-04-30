@@ -50,3 +50,27 @@ func GetAllUsers() ([]User, error) {
 
 	return users, nil
 }
+
+func CreateUser(name, surname string, AFM, AMKA, roleID int) (int64, error) {
+	stmt, err := utils.DB.Prepare("INSERT INTO Users( Name, Surname, AFM, AMKA, Role_id) VALUES( ?, ?, ?, ?, ? )")
+	if err != nil {
+		return 0, err
+	}
+
+	defer stmt.Close()
+
+	res, err := stmt.Exec(name, surname, AFM, AMKA, roleID)
+
+	if err != nil {
+		return 0, err
+	}
+
+	if numberOfRowsAffected, err := res.RowsAffected(); err != nil {
+		return 0, err
+	} else {
+
+		return numberOfRowsAffected, nil
+
+	}
+
+}

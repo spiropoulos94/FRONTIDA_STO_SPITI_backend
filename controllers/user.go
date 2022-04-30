@@ -6,7 +6,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"spiropoulos94/FRONTIDA_STO_SPITI_backend/models"
-	"spiropoulos94/FRONTIDA_STO_SPITI_backend/utils"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 )
@@ -47,38 +47,53 @@ func ListUsers(c *gin.Context) {
 }
 
 func AdminCreateUser(c *gin.Context) {
+
+	fmt.Println("admin create user runs")
+
 	jsonData, _ := ioutil.ReadAll(c.Request.Body)
 	newUser := models.User{}
 	json.Unmarshal(jsonData, &newUser)
 
-	if newUser.AFM == 0 || newUser.AMKA == 0 || newUser.Profession.Role_id == 0 {
-		ErrorJSON(c, "AFM and AMKA  and Role_id is needed ")
+	if strings.TrimSpace(newUser.Name) == "" || strings.TrimSpace(newUser.Surname) == "" || newUser.AFM == 0 || newUser.AMKA == 0 || newUser.Profession.Role_id == 0 {
+		ErrorJSON(c, "Name, Surname ,AFM and AMKA  and Role_id are needed ")
 		return
 	}
 
-	stmt, err := utils.DB.Prepare("INSERT INTO Users( Name, Surname, AFM, AMKA, Role_id) VALUES( ?, ?, ?, ?, ? )")
-	if err != nil {
-		ErrorJSON(c, err.Error())
-		return
-	}
-
-	defer stmt.Close()
-
-	res, err := stmt.Exec(newUser.Name, newUser.Surname, newUser.AFM, newUser.AMKA, newUser.Profession.Role_id)
+	rowsAffected, err := models.CreateUser(newUser.Name, newUser.Surname, newUser.AFM, newUser.AMKA, newUser.Profession.Role_id)
 
 	if err != nil {
 		ErrorJSON(c, err.Error())
 		return
 	}
 
-	if number, err := res.RowsAffected(); err != nil {
-		ErrorJSON(c, err.Error())
-	} else {
+	c.JSON(http.StatusOK, gin.H{
+		"rows affected": rowsAffected,
+		"message":       "User added",
+	})
 
-		c.JSON(http.StatusOK, gin.H{
-			"rows affected": number,
-			"message":       "User added",
-		})
-	}
+	// stmt, err := utils.DB.Prepare("INSERT INTO Users( Name, Surname, AFM, AMKA, Role_id) VALUES( ?, ?, ?, ?, ? )")
+	// if err != nil {
+	// 	ErrorJSON(c, err.Error())
+	// 	return
+	// }
+
+	// defer stmt.Close()
+
+	// res, err := stmt.Exec(newUser.Name, newUser.Surname, newUser.AFM, newUser.AMKA, newUser.Profession.Role_id)
+
+	// if err != nil {
+	// 	ErrorJSON(c, err.Error())
+	// 	return
+	// }
+
+	// if number, err := res.RowsAffected(); err != nil {
+	// 	ErrorJSON(c, err.Error())
+	// } else {
+
+	// 	c.JSON(http.StatusOK, gin.H{
+	// 		"rows affected": number,
+	// 		"message":       "User added",
+	// 	})
+	// }
 
 }

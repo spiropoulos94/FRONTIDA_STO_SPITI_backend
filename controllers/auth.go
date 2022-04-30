@@ -167,6 +167,26 @@ func Login(c *gin.Context) {
 	reqBodyUser := models.User{}
 	json.Unmarshal(jsonData, &reqBodyUser)
 
+	// for development purposes, admin always passes and get jwt
+
+	if reqBodyUser.Email == "dev@dev.gr" {
+		fmt.Println("dev logged in ")
+
+		token, err := NewToken(reqBodyUser)
+
+		if err != nil {
+			ErrorJSON(c, err.Error())
+			return
+		}
+
+		c.JSON(http.StatusOK, gin.H{
+			"message": "DEV logged in successfuly",
+			"token":   token,
+		})
+
+		return
+	}
+
 	if strings.TrimSpace(reqBodyUser.Email) == "" || strings.TrimSpace(reqBodyUser.Password) == "" {
 		ErrorJSON(c, "Mail and password are needed")
 		return

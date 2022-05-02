@@ -213,6 +213,7 @@ func Login(c *gin.Context) {
 		return
 
 	} else if err != nil {
+		// edw skaei
 		fmt.Println("Error", err)
 		ErrorJSON(c, err.Error())
 		return

@@ -12,9 +12,9 @@ import (
 
 var DB *sql.DB
 
-func InsertAdminAccount() {
+func InsertAdminAccount() error {
 	fmt.Println("insert admin account runs")
-	//delete admin account if exists and make a new one
+	//If admin account does not exist, make one.
 	query := "SELECT Users.User_id from Users WHERE Email = 'dev@dev.gr';"
 
 	var id int
@@ -22,14 +22,38 @@ func InsertAdminAccount() {
 	err := DB.QueryRow(query).Scan(&id)
 
 	if err == sql.ErrNoRows {
-		fmt.Println("No admin account found", err)
-		return
+		fmt.Println("No admin account found, will create one.", err)
+
+		hashedAdminPass, err := HashPassword(os.Getenv("ADMIN_PASS"))
+
+		if err != nil {
+			fmt.Println("Error while hashing password")
+			return err
+		}
+
+		createAdminQuery := "INSERT INTO Users ( Name, Surname, AFM, AMKA, Role_id,  Email, Password) VALUES ('AdminDev', 'AdminDev', '0' , '0', '1', 'dev@dev.gr', ?);"
+
+		res, err := DB.Exec(createAdminQuery, hashedAdminPass)
+
+		if err != nil {
+			return err
+		}
+
+		if numberOfRowsAffected, err := res.RowsAffected(); err != nil {
+			return err
+		} else {
+
+			fmt.Println("Number of rows affected : ", numberOfRowsAffected)
+			return nil
+
+		}
+
 	} else if err != nil {
 		fmt.Println("Error : ", err)
-		return
+		return err
 	} else {
 		fmt.Println("admin account found in database")
-		return
+		return nil
 	}
 
 }
@@ -59,6 +83,11 @@ func SetupDatabase() {
 	}
 	fmt.Println("Connected!")
 
-	InsertAdminAccount()
+	createAdminErr := InsertAdminAccount()
+
+	if createAdminErr != nil {
+		fmt.Println("!!! Error while creating admin account : ", err)
+		log.Fatal(createAdminErr)
+	}
 
 }

@@ -3,6 +3,7 @@ package main
 import (
 	"database/sql"
 	"fmt"
+	"net/http"
 	"spiropoulos94/FRONTIDA_STO_SPITI_backend/controllers"
 	"spiropoulos94/FRONTIDA_STO_SPITI_backend/models"
 	"spiropoulos94/FRONTIDA_STO_SPITI_backend/utils"
@@ -63,4 +64,23 @@ func CheckHeaderForJWT() gin.HandlerFunc {
 
 		c.Next()
 	}
+}
+
+func CheckIfUserIsAdmin() gin.HandlerFunc {
+
+	return func(c *gin.Context) {
+		fmt.Println("MIDDLEWARE checking for if user is admin in order to proceed")
+
+		roleId, exists := c.Get("User_Role_id")
+
+		if exists && roleId == 1 {
+			c.Next()
+		} else {
+			c.JSON(http.StatusForbidden, gin.H{
+				"message": "No access",
+			})
+			c.Abort()
+		}
+	}
+
 }

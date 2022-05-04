@@ -18,7 +18,7 @@ func SetupRouter() {
 		// userGroup.DELETE("/:id", controllers.DeleteUser)
 	}
 
-	userGroup.POST("/admin-create", controllers.AdminCreateUser) // middleware to check if user is admin
+	userGroup.POST("/admin-create", CheckIfUserIsAdmin(), controllers.AdminCreateUser) // middleware to check if user is admin
 	router.POST("/signup", controllers.SignUp)
 	router.POST("/login", controllers.Login)
 

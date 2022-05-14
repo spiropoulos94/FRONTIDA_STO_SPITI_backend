@@ -87,9 +87,9 @@ func AdminCreateUser(c *gin.Context) {
 	encodedStr := b64.StdEncoding.EncodeToString([]byte(stringifiedJSON))
 
 	c.JSON(http.StatusOK, gin.H{
-		"rows affected": rowsAffected,
-		"message":       "User added",
-		"encodedFields": encodedStr,
+		"rows affected":         rowsAffected,
+		"message":               "User added",
+		"encodedFields(base64)": encodedStr,
 	})
 
 	// stmt, err := utils.DB.Prepare("INSERT INTO Users( Name, Surname, AFM, AMKA, Role_id) VALUES( ?, ?, ?, ?, ? )")

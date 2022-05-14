@@ -9,7 +9,7 @@ import (
 type Service struct {
 	ID      int    `json:"Service_id"`
 	Title   string `json:"Title"`
-	Role_id string `json:"Role_id"`
+	Role_id int    `json:"Role_id"`
 }
 
 func GetAllServices() ([]Service, error) {

@@ -64,7 +64,7 @@ func ParseToken(token_string string, c *gin.Context) (*Claims, error) {
 }
 
 // complete sign up
-func SignUp(c *gin.Context) {
+func CompleteSignUp(c *gin.Context) {
 	jsonData, _ := ioutil.ReadAll(c.Request.Body)
 	reqBodyUser := models.User{}
 	json.Unmarshal(jsonData, &reqBodyUser)

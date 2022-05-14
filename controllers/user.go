@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	b64 "encoding/base64"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -83,10 +84,12 @@ func AdminCreateUser(c *gin.Context) {
 
 	stringifiedJSON := string(jsonByteSlice)
 
+	encodedStr := b64.StdEncoding.EncodeToString([]byte(stringifiedJSON))
+
 	c.JSON(http.StatusOK, gin.H{
 		"rows affected": rowsAffected,
 		"message":       "User added",
-		"encodedFields": stringifiedJSON,
+		"encodedFields": encodedStr,
 	})
 
 	// stmt, err := utils.DB.Prepare("INSERT INTO Users( Name, Surname, AFM, AMKA, Role_id) VALUES( ?, ?, ?, ?, ? )")

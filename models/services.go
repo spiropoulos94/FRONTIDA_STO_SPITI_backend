@@ -40,7 +40,7 @@ func GetAllServices() ([]Service, error) {
 	return services, nil
 }
 
-func GetUserServices(id int) ([]Service, error) {
+func GetServicesByUserId(id int) ([]Service, error) {
 	var services []Service
 
 	fmt.Println("getting services for user with id: ", id)

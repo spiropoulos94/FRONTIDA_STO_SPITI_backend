@@ -52,7 +52,7 @@ func UserServices(c *gin.Context) {
 		}
 
 	} else {
-		services, err = models.GetUserServices(userID)
+		services, err = models.GetServicesByUserId(userID)
 		if err != nil {
 			ErrorJSON(c, err.Error())
 			return

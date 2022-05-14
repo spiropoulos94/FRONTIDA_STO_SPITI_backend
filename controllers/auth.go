@@ -235,9 +235,23 @@ func Login(c *gin.Context) {
 			return
 		}
 
+		var availableServices []models.Service
+
+		if dbUser.Profession.Role_id == 1 {
+			availableServices, err = models.GetAllServices()
+		} else {
+			availableServices, err = models.GetServicesByUserId(dbUser.User_id)
+		}
+
+		if err != nil {
+			ErrorJSON(c, err.Error())
+			return
+		}
+
 		c.JSON(http.StatusOK, gin.H{
-			"message": "user logged in successfuly",
-			"token":   token,
+			"message":  "user logged in successfuly",
+			"token":    token,
+			"services": availableServices,
 		})
 	}
 

@@ -66,9 +66,27 @@ func AdminCreateUser(c *gin.Context) {
 		return
 	}
 
+	encodedFields := make(map[string]interface{})
+
+	encodedFields["Name"] = newUser.Name
+	encodedFields["Surname"] = newUser.Surname
+	encodedFields["AFM"] = newUser.AFM
+	encodedFields["AMKA"] = newUser.AMKA
+	encodedFields["Profession"] = newUser.Profession.Role_id
+
+	fmt.Println(encodedFields)
+	fmt.Println("--------")
+	jsonByteSlice, err := json.Marshal(encodedFields)
+	if err != nil {
+		fmt.Println("err while marshal: ", err)
+	}
+
+	stringifiedJSON := string(jsonByteSlice)
+
 	c.JSON(http.StatusOK, gin.H{
 		"rows affected": rowsAffected,
 		"message":       "User added",
+		"encodedFields": stringifiedJSON,
 	})
 
 	// stmt, err := utils.DB.Prepare("INSERT INTO Users( Name, Surname, AFM, AMKA, Role_id) VALUES( ?, ?, ?, ?, ? )")

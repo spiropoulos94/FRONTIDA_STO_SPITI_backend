@@ -34,8 +34,33 @@ func RetrieveDataFromContext(c *gin.Context) map[string]interface{} {
 
 func UserServices(c *gin.Context) {
 	userData := RetrieveDataFromContext(c)
-	fmt.Println(userData["user_id"])
-	fmt.Println(userData["user_role_id"])
+
+	userID := userData["user_id"].(int)
+	userRoleID := userData["user_role_id"].(int)
+
+	fmt.Println(userID, userRoleID)
+
+	var services []models.Service
+	var err error
+
+	if userRoleID == 1 {
+		fmt.Println("admin")
+		services, err = models.GetAllServices()
+		if err != nil {
+			ErrorJSON(c, err.Error())
+			return
+		}
+
+	} else {
+		services, err = models.GetUserServices(userID)
+		if err != nil {
+			ErrorJSON(c, err.Error())
+			return
+		}
+		fmt.Println("user")
+	}
+
+	c.JSON(http.StatusOK, gin.H{"services": services})
 }
 
 func ListUsers(c *gin.Context) {

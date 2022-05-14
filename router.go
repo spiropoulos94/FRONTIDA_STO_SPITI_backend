@@ -14,6 +14,7 @@ func SetupRouter() {
 	{
 		// user group handlers
 		userGroup.GET("/", controllers.ListUsers)
+		userGroup.GET("/services", controllers.UserServices)
 		// userGroup.GET("/:id", controllers.FindUser)
 		// userGroup.DELETE("/:id", controllers.DeleteUser)
 	}

@@ -18,19 +18,30 @@ func ErrorJSON(c *gin.Context, err interface{}) {
 	})
 }
 
+func RetrieveDataFromContext(c *gin.Context) map[string]interface{} {
+	m := make(map[string]interface{})
+	userId, idExist := c.Get("User_id")
+	if idExist {
+		m["user_id"] = userId
+	}
+	userRoleId, roleIdExist := c.Get("User_Role_id")
+	if roleIdExist {
+		m["user_role_id"] = userRoleId
+	}
+
+	return m
+}
+
+func UserServices(c *gin.Context) {
+
+}
+
 func ListUsers(c *gin.Context) {
 	fmt.Println("getting users!")
 
-	userId, exist := c.Get("User_id")
+	contextData := RetrieveDataFromContext(c)
 
-	if exist {
-		fmt.Println("User id", userId)
-	}
-	userRoleId, exist := c.Get("User_Role_id")
-
-	if exist {
-		fmt.Println("Role id", userRoleId)
-	}
+	fmt.Println(contextData)
 
 	var users []models.User
 

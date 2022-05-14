@@ -33,7 +33,9 @@ func RetrieveDataFromContext(c *gin.Context) map[string]interface{} {
 }
 
 func UserServices(c *gin.Context) {
-
+	userData := RetrieveDataFromContext(c)
+	fmt.Println(userData["user_id"])
+	fmt.Println(userData["user_role_id"])
 }
 
 func ListUsers(c *gin.Context) {

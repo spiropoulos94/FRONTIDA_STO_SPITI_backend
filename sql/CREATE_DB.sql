@@ -31,7 +31,7 @@ CREATE TABLE Users (
     Surname varchar(255),
     AFM int NOT NULL UNIQUE,
     AMKA int NOT NULL UNIQUE,
-    Email varchar(255),
+    Email varchar(255) UNIQUE,
     Password varchar(255),
     Role_id int,
     PRIMARY KEY (User_id),

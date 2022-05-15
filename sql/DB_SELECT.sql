@@ -41,3 +41,14 @@ select
 from
     Roles
     left join Services on Roles.Role_id = Services.Role_id;
+
+-- select available permissions from a user to a report author
+SELECT
+    Permissions.Permission_id,
+    Permissions.Name
+FROM
+    Reports_permissions
+    LEFT JOIN Permissions ON Reports_permissions.Permission_id = Permissions.Permission_id
+WHERE
+    Reports_permissions.LoggedUserRole = 2
+    AND Reports_permissions.Report_author_id = 3;

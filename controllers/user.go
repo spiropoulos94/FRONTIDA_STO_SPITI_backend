@@ -85,6 +85,25 @@ func ListUsers(c *gin.Context) {
 	})
 }
 
+func FindUser(c *gin.Context) {
+	id := c.Param("id")
+
+	var user *models.User
+
+	user, err := models.GetUserByID(id)
+
+	if err != nil {
+		fmt.Println("err", err)
+		ErrorJSON(c, err.Error())
+		return
+	}
+
+	c.JSON(200, gin.H{
+		"users": user,
+	})
+
+}
+
 func AdminCreateUser(c *gin.Context) {
 
 	fmt.Println("admin create user runs")

@@ -1,6 +1,7 @@
 package models
 
 import (
+	"database/sql"
 	"fmt"
 	"spiropoulos94/FRONTIDA_STO_SPITI_backend/utils"
 )
@@ -19,6 +20,33 @@ type User struct {
 type Profession struct {
 	Role_id int    `json:"Role_id"`
 	Title   string `json:"Title"`
+}
+
+func GetUserByID(id string) (*User, error) {
+	var user User
+
+	stmt, err := utils.DB.Prepare("SELECT User_id, Name, Surname, AFM, AMKA, Email, Roles.Role_id, Roles.Title FROM Users LEFT JOIN Roles ON Users.Role_id = Roles.Role_id WHERE User_id = ?")
+
+	if err != nil {
+		return nil, err
+	}
+
+	defer stmt.Close()
+
+	row := stmt.QueryRow(id)
+
+	var userEmail sql.NullString
+
+	err = row.Scan(&user.User_id, &user.Name, &user.Surname, &user.AFM, &user.AMKA, &userEmail, &user.Profession.Role_id, &user.Profession.Title)
+
+	if err != nil {
+		return nil, err
+	}
+
+	user.Email = userEmail.String
+
+	return &user, nil
+
 }
 
 func GetAllUsers() ([]User, error) {

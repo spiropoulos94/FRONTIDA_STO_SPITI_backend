@@ -18,14 +18,14 @@ type Report struct {
 
 type Author struct {
 	User_id    int        `json:"User_id"`    // ok
-	Name       int        `json:"Name"`       // ok
-	Surname    int        `json:"Surname"`    // ok
+	Name       string     `json:"Name"`       // ok
+	Surname    string     `json:"Surname"`    // ok
 	Profession Profession `json:"Profession"` // ok
 }
 
 type Patient struct {
 	Patient_id     int     `json:"Patient_id"`
-	Fullname       int     `json:"Fullname"`
+	Fullname       string  `json:"Fullname"`
 	Patient_AMKA   int     `json:"Patient_AMKA"`
 	HealthSecurity bool    `json:"Health_security"`
 	Address        Address `json:"Address"`
@@ -63,7 +63,7 @@ func GetAllReports() ([]Report, error) {
 		var profession Profession
 		var address Address
 
-		if err := rows.Scan(&report.Report_id, &report.ReportContent, &report.ReportDate, &report.ArrivalTime, &report.DepartureTime, &report.AbscenceStatus, &author.User_id, &author.Name, &author.Surname, &profession.Role_id, &profession.Title, &patient.Patient_id, &patient.Fullname, &patient.Patient_AMKA, &patient.HealthSecurity, &address.Address_id, &address.Street, &address.Number, &address.City, address.PostalCode); err != nil {
+		if err := rows.Scan(&report.Report_id, &report.ReportContent, &report.ReportDate, &report.ArrivalTime, &report.DepartureTime, &report.AbscenceStatus, &author.User_id, &author.Name, &author.Surname, &profession.Role_id, &profession.Title, &patient.Patient_id, &patient.Fullname, &patient.Patient_AMKA, &patient.HealthSecurity, &address.Address_id, &address.Street, &address.Number, &address.City, &address.PostalCode); err != nil {
 			fmt.Println("err", err)
 			return nil, err
 		}
@@ -75,6 +75,9 @@ func GetAllReports() ([]Report, error) {
 
 		reports = append(reports, report)
 	}
+
+	fmt.Println("reports")
+	fmt.Printf("%+v\n", reports)
 
 	return reports, nil
 

@@ -52,3 +52,12 @@ FROM
 WHERE
     Reports_permissions.LoggedUserRole = 2
     AND Reports_permissions.Report_author_id = 3;
+
+-- dialegei reports + users + patients
+SELECT
+    *
+FROM
+    Daily_Reports
+    LEFT JOIN Roles ON Daily_Reports.User_id = Roles.Role_id
+    LEFT JOIN Users ON Daily_Reports.User_id = Users.User_id
+    LEFT JOIN Patients ON Daily_Reports.Patient_id = Patients.Patient_id;

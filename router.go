@@ -21,6 +21,12 @@ func SetupRouter() {
 
 	userGroup.POST("/admin-create", CheckIfUserIsAdmin(), controllers.AdminCreateUser) // middleware to check if user is admin
 
+	reportGroup := router.Group("/reports")
+	{
+		reportGroup.GET("/all", controllers.ListAllReports, CheckIfUserIsAdmin())
+		// reportGroup.GET("/", controllers.ListAvailableReports)
+	}
+
 	router.POST("/complete-signup", controllers.CompleteSignUp)
 	router.POST("/login", controllers.Login)
 

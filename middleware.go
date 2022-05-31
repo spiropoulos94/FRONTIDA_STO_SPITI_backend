@@ -73,6 +73,9 @@ func CheckIfUserIsAdmin() gin.HandlerFunc {
 
 		roleId, exists := c.Get("User_Role_id")
 
+		fmt.Println("roleId")
+		fmt.Println(roleId)
+
 		if exists && roleId == 1 {
 			c.Next()
 		} else {

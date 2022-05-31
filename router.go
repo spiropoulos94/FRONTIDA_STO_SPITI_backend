@@ -21,9 +21,9 @@ func SetupRouter() {
 
 	userGroup.POST("/admin-create", CheckIfUserIsAdmin(), controllers.AdminCreateUser) // middleware to check if user is admin
 
-	reportGroup := router.Group("/reports")
+	reportGroup := router.Group("/reports", CheckHeaderForJWT())
 	{
-		reportGroup.GET("/all", controllers.ListAllReports, CheckIfUserIsAdmin())
+		reportGroup.GET("/all", CheckIfUserIsAdmin(), controllers.ListAllReports)
 		// reportGroup.GET("/", controllers.ListAvailableReports)
 	}
 

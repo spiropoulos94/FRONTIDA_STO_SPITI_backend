@@ -76,9 +76,5 @@ func GetAllReports() ([]Report, error) {
 		reports = append(reports, report)
 	}
 
-	fmt.Println("reports")
-	fmt.Printf("%+v\n", reports)
-
 	return reports, nil
-
 }

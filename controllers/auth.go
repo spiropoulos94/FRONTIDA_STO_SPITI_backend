@@ -252,14 +252,8 @@ func Login(c *gin.Context) {
 			return
 		}
 
-		fmt.Println("returns ok")
-		fmt.Println(gin.H{
-			"message":  "user logged in successfuly",
-			"token":    token,
-			"services": availableServices,
-		})
-
 		c.JSON(http.StatusOK, gin.H{
+			"status":   "ok",
 			"message":  "user logged in successfuly",
 			"token":    token,
 			"services": availableServices,

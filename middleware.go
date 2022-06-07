@@ -12,6 +12,17 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+func CORS_HEADERS() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		// Add CORS headers
+		c.Header("Access-Control-Allow-Origin", "http://localhost:3000")
+		// c.Header("Access-Control-Allow-Origin", "*")
+		// c.Header("Access-Control-Allow-Methods", "PUT, POST, GET, DELETE, OPTIONS")
+
+		c.Next()
+	}
+}
+
 func CheckHeaderForJWT() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		fmt.Println("MIDDLEWARE checking for authorization headers")

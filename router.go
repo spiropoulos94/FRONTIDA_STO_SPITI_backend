@@ -10,6 +10,8 @@ func SetupRouter() {
 
 	router := gin.Default()
 
+	router.Use(CORS_HEADERS())
+
 	userGroup := router.Group("/user", CheckHeaderForJWT())
 	{
 		// user group handlers

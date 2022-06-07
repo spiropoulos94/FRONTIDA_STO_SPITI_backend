@@ -163,9 +163,13 @@ func CompleteSignUp(c *gin.Context) {
 
 func Login(c *gin.Context) {
 
+	fmt.Println("Login")
+
 	jsonData, _ := ioutil.ReadAll(c.Request.Body)
 	reqBodyUser := models.User{}
 	json.Unmarshal(jsonData, &reqBodyUser)
+
+	fmt.Println("1")
 
 	// for development purposes, admin always passes and get jwt
 	// environment := os.Getenv("ENVIRONMENT")
@@ -247,6 +251,13 @@ func Login(c *gin.Context) {
 			ErrorJSON(c, err.Error())
 			return
 		}
+
+		fmt.Println("returns ok")
+		fmt.Println(gin.H{
+			"message":  "user logged in successfuly",
+			"token":    token,
+			"services": availableServices,
+		})
 
 		c.JSON(http.StatusOK, gin.H{
 			"message":  "user logged in successfuly",

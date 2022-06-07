@@ -196,7 +196,7 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	stmt, err := utils.DB.Prepare("Select Email, Password, User_id, Role_id from Users WHERE Email = ? ;")
+	stmt, err := utils.DB.Prepare("Select Name, Surname, Email, Password, User_id, Roles.Role_id, Roles.Title from Users LEFT JOIN Roles ON Roles.Role_id = Users.Role_id WHERE Email = ? ")
 	if err != nil {
 		ErrorJSON(c, err.Error())
 		return
@@ -207,7 +207,7 @@ func Login(c *gin.Context) {
 	var dbUser models.User
 	var dbUserProfession models.Profession
 
-	err = stmt.QueryRow(reqBodyUser.Email).Scan(&dbUser.Email, &dbUser.Password, &dbUser.User_id, &dbUserProfession.Role_id)
+	err = stmt.QueryRow(reqBodyUser.Email).Scan(&dbUser.Name, &dbUser.Surname, &dbUser.Email, &dbUser.Password, &dbUser.User_id, &dbUserProfession.Role_id, &dbUserProfession.Title)
 
 	dbUser.Profession = dbUserProfession
 
@@ -252,11 +252,23 @@ func Login(c *gin.Context) {
 			return
 		}
 
+		userResponse := models.UserLoginReponse{
+			User_id:    dbUser.User_id,
+			Name:       dbUser.Name,
+			Surname:    dbUser.Surname,
+			AFM:        dbUser.AFM,
+			AMKA:       dbUser.AMKA,
+			Email:      dbUser.Email,
+			Profession: dbUser.Profession,
+			Services:   availableServices,
+		}
+
 		c.JSON(http.StatusOK, gin.H{
 			"ok":       true,
 			"message":  "user logged in successfuly",
 			"token":    token,
 			"services": availableServices,
+			"user":     userResponse, // TODO: ftiakse user response struct pou na exei mesa ID, Name, Surname, Mail, Profession, Services
 		})
 	}
 

@@ -253,7 +253,7 @@ func Login(c *gin.Context) {
 		}
 
 		c.JSON(http.StatusOK, gin.H{
-			"status":   "ok",
+			"ok":       true,
 			"message":  "user logged in successfuly",
 			"token":    token,
 			"services": availableServices,

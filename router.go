@@ -21,6 +21,12 @@ func SetupRouter() {
 		// userGroup.DELETE("/:id", controllers.DeleteUser)
 	}
 
+	rolesGroup := router.Group("/roles", CheckHeaderForJWT())
+	{
+		// roles group handlers
+		rolesGroup.GET("/", controllers.ListRoles)
+	}
+
 	userGroup.POST("/admin-create", CheckIfUserIsAdmin(), controllers.AdminCreateUser) // middleware to check if user is admin
 
 	reportGroup := router.Group("/reports", CheckHeaderForJWT())

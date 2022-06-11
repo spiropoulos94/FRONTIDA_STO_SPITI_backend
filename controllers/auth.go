@@ -240,9 +240,11 @@ func Login(c *gin.Context) {
 		}
 
 		var availableServices []models.Service
+		var availableRoles []models.Role
 
 		if dbUser.Profession.Role_id == 1 {
 			availableServices, err = models.GetAllServices()
+			availableRoles, err = models.GetAllRoles()
 		} else {
 			availableServices, err = models.GetServicesByUserId(dbUser.User_id)
 		}
@@ -268,6 +270,7 @@ func Login(c *gin.Context) {
 			"message":  "user logged in successfuly",
 			"token":    token,
 			"services": availableServices,
+			"roles":    availableRoles,
 			"user":     userResponse, // TODO: ftiakse user response struct pou na exei mesa ID, Name, Surname, Mail, Profession, Services
 		})
 	}

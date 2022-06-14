@@ -15,11 +15,15 @@ import (
 func CORS_HEADERS() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// Add CORS headers
+		c.Header("Access-Control-Allow-Headers", "Content-Type, Authorization")
 		c.Header("Access-Control-Allow-Origin", "http://localhost:3000")
 		// c.Header("Access-Control-Allow-Origin", "*")
-		// c.Header("Access-Control-Allow-Methods", "PUT, POST, GET, DELETE, OPTIONS")
-
-		c.Next()
+		c.Header("Access-Control-Allow-Methods", "PUT, POST, GET, DELETE, OPTIONS")
+		if c.Request.Method != "OPTIONS" {
+			c.Next()
+		} else {
+			c.AbortWithStatus(http.StatusOK)
+		}
 	}
 }
 

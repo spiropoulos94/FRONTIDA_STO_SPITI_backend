@@ -143,9 +143,8 @@ func AdminCreateUser(c *gin.Context) {
 
 	encodedStr := b64.StdEncoding.EncodeToString([]byte(stringifiedJSON))
 
-	fmt.Println("FABSJGBADSJGD")
-
 	c.JSON(200, gin.H{
+		"ok":                    true,
 		"rows affected":         rowsAffected,
 		"message":               "User added",
 		"encodedFields(base64)": encodedStr,

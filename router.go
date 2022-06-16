@@ -12,7 +12,7 @@ func SetupRouter() {
 
 	router.Use(CORS_HEADERS())
 
-	userGroup := router.Group("/user", CheckHeaderForJWT())
+	userGroup := router.Group("/users", CheckHeaderForJWT())
 	{
 		// user group handlers
 		userGroup.GET("/", controllers.ListUsers)

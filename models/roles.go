@@ -37,3 +37,13 @@ func GetAllRoles() ([]Role, error) {
 
 	return roles, nil
 }
+
+func GetRole(roleID int) (*Role, error) {
+	var role Role
+
+	if err := utils.DB.QueryRow("SELECT * from Roles where Role_id = ?", roleID).Scan(&role.Role_id, &role.Title); err != nil {
+		return nil, err
+	}
+
+	return &role, nil
+}

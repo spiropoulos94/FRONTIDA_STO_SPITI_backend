@@ -124,13 +124,20 @@ func AdminCreateUser(c *gin.Context) {
 		return
 	}
 
+	newUserProfession, err := models.GetRole(newUser.Profession.Role_id)
+
+	if err != nil {
+		ErrorJSON(c, err.Error())
+		return
+	}
+
 	encodedFields := make(map[string]interface{})
 
 	encodedFields["Name"] = newUser.Name
 	encodedFields["Surname"] = newUser.Surname
 	encodedFields["AFM"] = newUser.AFM
 	encodedFields["AMKA"] = newUser.AMKA
-	encodedFields["Profession"] = newUser.Profession.Role_id
+	encodedFields["Profession"] = newUserProfession
 
 	fmt.Println(encodedFields)
 	fmt.Println("--------")

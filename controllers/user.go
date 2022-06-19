@@ -117,7 +117,7 @@ func AdminCreateUser(c *gin.Context) {
 		return
 	}
 
-	rowsAffected, err := models.CreateUser(newUser.Name, newUser.Surname, newUser.AFM, newUser.AMKA, newUser.Profession.Role_id)
+	newUserID, err := models.CreateUser(newUser.Name, newUser.Surname, newUser.AFM, newUser.AMKA, newUser.Profession.Role_id)
 
 	if err != nil {
 		ErrorJSON(c, err.Error())
@@ -133,6 +133,7 @@ func AdminCreateUser(c *gin.Context) {
 
 	encodedFields := make(map[string]interface{})
 
+	encodedFields["ID"] = newUserID
 	encodedFields["Name"] = newUser.Name
 	encodedFields["Surname"] = newUser.Surname
 	encodedFields["AFM"] = newUser.AFM
@@ -152,7 +153,7 @@ func AdminCreateUser(c *gin.Context) {
 
 	c.JSON(200, gin.H{
 		"ok":                    true,
-		"rows affected":         rowsAffected,
+		"rows affected":         newUserID,
 		"message":               "User added",
 		"encodedFields(base64)": encodedStr,
 	})

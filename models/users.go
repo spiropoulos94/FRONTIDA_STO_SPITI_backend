@@ -99,16 +99,25 @@ func CreateUser(name, surname string, AFM, AMKA, roleID int) (int64, error) {
 	defer stmt.Close()
 
 	res, err := stmt.Exec(name, surname, AFM, AMKA, roleID)
+	if err != nil {
+		return 0, err
+	}
+
+	newUserID, err := res.LastInsertId()
+	if err != nil {
+		return -1, err
+	}
 
 	if err != nil {
 		return 0, err
 	}
 
 	if numberOfRowsAffected, err := res.RowsAffected(); err != nil {
+		fmt.Println("Rows affected,", numberOfRowsAffected)
 		return 0, err
 	} else {
 
-		return numberOfRowsAffected, nil
+		return newUserID, nil
 
 	}
 

@@ -9,6 +9,7 @@ import (
 	"os"
 	"spiropoulos94/FRONTIDA_STO_SPITI_backend/models"
 	"spiropoulos94/FRONTIDA_STO_SPITI_backend/utils"
+	"strconv"
 	"strings"
 	"time"
 
@@ -151,12 +152,56 @@ func CompleteSignUp(c *gin.Context) {
 	if err != nil {
 		fmt.Println("error while making token")
 		ErrorJSON(c, err.Error())
+		return
+	}
+
+	createdUserFromDB, err := models.GetUserByID(strconv.Itoa(dbUser.User_id))
+	if err != nil {
+		fmt.Println("error while making token")
+		ErrorJSON(c, err.Error())
+		return
+	}
+
+	var availableServices []models.Service
+	var availableRoles []models.Role
+
+	if dbUser.Profession.Role_id == 1 {
+		availableServices, err = models.GetAllServices()
+		if err != nil {
+			ErrorJSON(c, err.Error())
+			return
+		}
+		availableRoles, err = models.GetAllRoles()
+		if err != nil {
+			ErrorJSON(c, err.Error())
+			return
+		}
+	} else {
+		availableServices, err = models.GetServicesByUserId(dbUser.User_id)
+		if err != nil {
+			ErrorJSON(c, err.Error())
+			return
+		}
+	}
+
+	userResponse := models.UserLoginReponse{
+		User_id:    createdUserFromDB.User_id,
+		Name:       createdUserFromDB.Name,
+		Surname:    createdUserFromDB.Surname,
+		AFM:        createdUserFromDB.AFM,
+		AMKA:       createdUserFromDB.AMKA,
+		Email:      createdUserFromDB.Email,
+		Profession: createdUserFromDB.Profession,
+		Services:   availableServices,
 	}
 
 	c.JSON(http.StatusOK, gin.H{
+		"ok":            true,
 		"message":       "User signup complete!",
 		"rows affected": rowsAffected,
 		"token":         token,
+		"user":          userResponse,
+		"roles":         availableRoles,
 	})
 
 }

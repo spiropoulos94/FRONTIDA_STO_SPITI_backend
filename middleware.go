@@ -46,7 +46,12 @@ func CheckHeaderForJWT() gin.HandlerFunc {
 		fmt.Println("parse token and get this => ", user)
 
 		if err != nil {
-			controllers.ErrorJSON(c, err.Error())
+			// controllers.ErrorJSON(c, err.Error())
+			c.JSON(401, gin.H{
+				"error":   err.Error(),
+				"code":    401,
+				"message": "unauthorized",
+			})
 			c.Abort()
 			return
 		}

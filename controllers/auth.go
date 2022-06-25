@@ -51,7 +51,7 @@ func NewToken(user models.User) (string, error) {
 func ParseToken(token_string string, c *gin.Context) (*Claims, error) {
 
 	claims := &Claims{}
-
+	jwtSecret := []byte(os.Getenv("JWT_SECRET"))
 	_, err := jwt.ParseWithClaims(token_string, claims, func(token *jwt.Token) (interface{}, error) {
 		return jwtSecret, nil
 	})

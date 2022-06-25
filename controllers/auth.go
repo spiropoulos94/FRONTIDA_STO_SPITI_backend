@@ -37,7 +37,7 @@ func NewToken(user models.User) (string, error) {
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-
+	jwtSecret := []byte(os.Getenv("JWT_SECRET"))
 	tokenString, err := token.SignedString(jwtSecret)
 
 	if err != nil {

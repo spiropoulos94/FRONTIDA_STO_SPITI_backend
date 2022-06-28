@@ -66,6 +66,11 @@ func UserServices(c *gin.Context) {
 func ListUsers(c *gin.Context) {
 	fmt.Println("getting users!")
 
+	params := c.Request.URL.Query()
+
+	fmt.Println("params =>", params)
+	// use them to implement sorting and filtering
+
 	contextData := RetrieveDataFromContext(c)
 
 	fmt.Println(contextData)

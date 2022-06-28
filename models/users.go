@@ -14,7 +14,7 @@ type User struct {
 	AMKA       int        `json:"AMKA"`
 	Profession Profession `json:"Profession"`
 	Email      string     `json:"Email"`
-	Password   string     `json:"Password"`
+	Password   string     `json:"Password,omitempty"`
 
 	Active bool `json:",omitempty"`
 }

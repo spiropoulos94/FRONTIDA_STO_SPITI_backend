@@ -15,6 +15,8 @@ type User struct {
 	Profession Profession `json:"Profession"`
 	Email      string     `json:"Email"`
 	Password   string     `json:"Password"`
+
+	Active bool `json:",omitempty"`
 }
 
 type UserLoginReponse struct {
@@ -63,7 +65,7 @@ func GetUserByID(id string) (*User, error) {
 func GetAllUsers() ([]User, error) {
 	var users []User
 
-	rows, err := utils.DB.Query("SELECT Users.User_id, Users.Name, Users.Surname, Users.AFM, Users.AMKA,  Roles.Title , Roles.Role_id  FROM `Users` left join Roles on users.Role_id = Roles.Role_id")
+	rows, err := utils.DB.Query("SELECT Users.User_id, Users.Name, Users.Surname, Users.Email, Users.AFM, Users.AMKA,  Roles.Title , Roles.Role_id  FROM `Users` left join Roles on users.Role_id = Roles.Role_id")
 	if err != nil {
 		fmt.Println("error => ", err)
 		return nil, err
@@ -74,11 +76,15 @@ func GetAllUsers() ([]User, error) {
 		var user User
 		var profession Profession
 
-		if err := rows.Scan(&user.User_id, &user.Name, &user.Surname, &user.AFM, &user.AMKA, &profession.Title, &profession.Role_id); err != nil {
+		var userEmail sql.NullString
+
+		if err := rows.Scan(&user.User_id, &user.Name, &user.Surname, &userEmail, &user.AFM, &user.AMKA, &profession.Title, &profession.Role_id); err != nil {
 			fmt.Println("err", err)
 			return nil, err
 		}
 		user.Profession = profession
+		user.Email = userEmail.String
+		user.Active = len(userEmail.String) > 0
 		users = append(users, user)
 	}
 

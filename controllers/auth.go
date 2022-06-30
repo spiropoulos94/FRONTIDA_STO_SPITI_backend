@@ -184,7 +184,7 @@ func CompleteSignUp(c *gin.Context) {
 		}
 	}
 
-	userResponse := models.UserLoginReponse{
+	userResponse := models.UserResponse{
 		User_id:    createdUserFromDB.User_id,
 		Name:       createdUserFromDB.Name,
 		Surname:    createdUserFromDB.Surname,
@@ -299,7 +299,7 @@ func Login(c *gin.Context) {
 			return
 		}
 
-		userResponse := models.UserLoginReponse{
+		userResponse := models.UserResponse{
 			User_id:    dbUser.User_id,
 			Name:       dbUser.Name,
 			Surname:    dbUser.Surname,

@@ -16,10 +16,11 @@ type User struct {
 	Email      string     `json:"Email"`
 	Password   string     `json:"Password,omitempty"`
 
-	Active bool `json:",omitempty"`
+	Active       bool `json:",omitempty"`
+	ReportsCount int  `json:"ReportsCount"`
 }
 
-type UserLoginReponse struct {
+type UserResponse struct {
 	User_id    int        `json:"User_id"`
 	Name       string     `json:"Name"`
 	Surname    string     `json:"Surname"`
@@ -28,6 +29,7 @@ type UserLoginReponse struct {
 	Email      string     `json:"Email"`
 	Profession Profession `json:"Profession"`
 	Services   []Service  `json:"Services"`
+	Reports    []Report   `json:"Reports,omitempty"`
 }
 
 type Profession struct {
@@ -66,6 +68,7 @@ func GetAllUsers() ([]User, error) {
 	var users []User
 
 	rows, err := utils.DB.Query("SELECT Users.User_id, Users.Name, Users.Surname, Users.Email, Users.AFM, Users.AMKA,  Roles.Title , Roles.Role_id  FROM `Users` left join Roles on users.Role_id = Roles.Role_id")
+
 	if err != nil {
 		fmt.Println("error => ", err)
 		return nil, err
@@ -75,6 +78,10 @@ func GetAllUsers() ([]User, error) {
 	for rows.Next() {
 		var user User
 		var profession Profession
+		// var report Report
+
+		var reportID sql.NullInt64
+		var reportContent sql.NullString
 
 		var userEmail sql.NullString
 
@@ -85,6 +92,17 @@ func GetAllUsers() ([]User, error) {
 		user.Profession = profession
 		user.Email = userEmail.String
 		user.Active = len(userEmail.String) > 0
+
+		fmt.Println("reportID =>", reportID)
+		fmt.Println("reportContent =>", reportContent)
+
+		userReportsCount, err := GetReportsCount(user.User_id)
+		if err != nil {
+			return nil, err
+		}
+
+		user.ReportsCount = userReportsCount
+
 		users = append(users, user)
 	}
 

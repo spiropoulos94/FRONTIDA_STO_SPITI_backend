@@ -9,7 +9,6 @@ import (
 	"os"
 	"spiropoulos94/FRONTIDA_STO_SPITI_backend/models"
 	"spiropoulos94/FRONTIDA_STO_SPITI_backend/utils"
-	"strconv"
 	"strings"
 	"time"
 
@@ -155,7 +154,7 @@ func CompleteSignUp(c *gin.Context) {
 		return
 	}
 
-	createdUserFromDB, err := models.GetUserByID(strconv.Itoa(dbUser.User_id))
+	createdUserFromDB, err := models.GetUserByID(dbUser.User_id)
 	if err != nil {
 		fmt.Println("error while making token")
 		ErrorJSON(c, err.Error())

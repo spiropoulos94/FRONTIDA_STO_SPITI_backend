@@ -18,6 +18,7 @@ func SetupRouter() {
 		userGroup.GET("/", controllers.ListUsers)
 		userGroup.GET("/services", controllers.UserServices)
 		userGroup.GET("/:id", controllers.FindUser)
+		userGroup.GET("/hash/:id", controllers.GetHash)
 		userGroup.GET("/:id/reports", controllers.ListUserReports)
 		// userGroup.DELETE("/:id", controllers.DeleteUser)
 	}

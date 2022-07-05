@@ -2,6 +2,9 @@ package models
 
 import (
 	"database/sql"
+	b64 "encoding/base64"
+	"encoding/json"
+	"errors"
 	"fmt"
 	"spiropoulos94/FRONTIDA_STO_SPITI_backend/utils"
 )
@@ -37,7 +40,27 @@ type Profession struct {
 	Title   string `json:"Title"`
 }
 
-func GetUserByID(id string) (*User, error) {
+func GenerateUserHash(id int) (*string, error) {
+
+	user, err := GetUserByID(id)
+	if err != nil {
+		fmt.Println("err", err)
+		return nil, err
+	}
+
+	if len(user.Email) > 0 {
+		return nil, errors.New("this user has already been registered")
+	}
+
+	encodedStr, err := UserToHashString(user)
+	if err != nil {
+		return nil, err
+	}
+
+	return encodedStr, nil
+}
+
+func GetUserByID(id int) (*User, error) {
 	var user User
 
 	stmt, err := utils.DB.Prepare("SELECT User_id, Name, Surname, AFM, AMKA, Email, Roles.Role_id, Roles.Title FROM Users LEFT JOIN Roles ON Users.Role_id = Roles.Role_id WHERE User_id = ?")
@@ -139,4 +162,26 @@ func CreateUser(name, surname string, AFM, AMKA, roleID int) (int64, error) {
 
 	}
 
+}
+
+func UserToHashString(user *User) (*string, error) {
+	encodedFields := make(map[string]interface{})
+
+	encodedFields["ID"] = user.User_id
+	encodedFields["Name"] = user.Name
+	encodedFields["Surname"] = user.Surname
+	encodedFields["AFM"] = user.AFM
+	encodedFields["AMKA"] = user.AMKA
+	encodedFields["Profession"] = user.Profession
+
+	jsonByteSlice, err := json.Marshal(encodedFields)
+	if err != nil {
+		return nil, err
+	}
+
+	stringifiedJSON := string(jsonByteSlice)
+
+	encodedStr := b64.StdEncoding.EncodeToString([]byte(stringifiedJSON))
+
+	return &encodedStr, nil
 }

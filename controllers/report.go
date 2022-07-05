@@ -29,12 +29,15 @@ func ListAllReports(c *gin.Context) {
 
 func ListUserReports(c *gin.Context) {
 
-	userID := c.Param("id")
-	userIDInt, _ := strconv.Atoi(userID)
+	idParam := c.Param("id")
+	id, err := strconv.Atoi(idParam)
 
-	var userReports []models.UserReportResponse
+	if err != nil {
+		ErrorJSON(c, err.Error())
+		return
+	}
 
-	userReports, err := models.GetUserReports(userIDInt)
+	userReports, err := models.GetUserReports(id)
 	if err != nil {
 		ErrorJSON(c, err.Error())
 		return

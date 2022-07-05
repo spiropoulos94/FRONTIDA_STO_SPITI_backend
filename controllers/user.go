@@ -7,6 +7,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"spiropoulos94/FRONTIDA_STO_SPITI_backend/models"
+	"strconv"
 	"strings"
 
 	"github.com/gin-gonic/gin"
@@ -92,9 +93,13 @@ func ListUsers(c *gin.Context) {
 }
 
 func FindUser(c *gin.Context) {
-	id := c.Param("id")
+	idParam := c.Param("id")
+	id, err := strconv.Atoi(idParam)
 
-	var user *models.User
+	if err != nil {
+		ErrorJSON(c, err.Error())
+		return
+	}
 
 	user, err := models.GetUserByID(id)
 
@@ -106,6 +111,31 @@ func FindUser(c *gin.Context) {
 
 	c.JSON(200, gin.H{
 		"users": user,
+	})
+
+}
+
+func GetHash(c *gin.Context) {
+	idParam := c.Param("id")
+	id, err := strconv.Atoi(idParam)
+
+	if err != nil {
+		ErrorJSON(c, err.Error())
+		return
+	}
+
+	hash, err := models.GenerateUserHash(id)
+
+	if err != nil {
+		ErrorJSON(c, err.Error())
+		return
+	}
+	fmt.Println(*hash)
+
+	c.JSON(200, gin.H{
+		"ok":      true,
+		"hash":    hash,
+		"User_id": id,
 	})
 
 }

@@ -80,9 +80,6 @@ func GetAllUsers() ([]User, error) {
 		var profession Profession
 		// var report Report
 
-		var reportID sql.NullInt64
-		var reportContent sql.NullString
-
 		var userEmail sql.NullString
 
 		if err := rows.Scan(&user.User_id, &user.Name, &user.Surname, &userEmail, &user.AFM, &user.AMKA, &profession.Title, &profession.Role_id); err != nil {
@@ -92,9 +89,6 @@ func GetAllUsers() ([]User, error) {
 		user.Profession = profession
 		user.Email = userEmail.String
 		user.Active = len(userEmail.String) > 0
-
-		fmt.Println("reportID =>", reportID)
-		fmt.Println("reportContent =>", reportContent)
 
 		userReportsCount, err := GetReportsCount(user.User_id)
 		if err != nil {

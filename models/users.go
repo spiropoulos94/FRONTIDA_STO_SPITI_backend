@@ -19,8 +19,8 @@ type User struct {
 	Email      string     `json:"Email"`
 	Password   string     `json:"Password,omitempty"`
 
-	Active       bool `json:",omitempty"`
-	ReportsCount int  `json:"ReportsCount"`
+	Active       *bool `json:"Active,omitempty"`
+	ReportsCount int   `json:"ReportsCount"`
 }
 
 type UserResponse struct {
@@ -106,7 +106,8 @@ func GetAllUsers() ([]User, error) {
 		}
 		user.Profession = profession
 		user.Email = userEmail.String
-		user.Active = len(userEmail.String) > 0
+		userActiveStatus := len(userEmail.String) > 0
+		user.Active = &userActiveStatus
 
 		userReportsCount, err := GetReportsCount(user.User_id)
 		if err != nil {

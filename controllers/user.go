@@ -108,6 +108,16 @@ func FindUser(c *gin.Context) {
 		return
 	}
 
+	var userActiveStatus bool
+
+	if len(user.Email) > 0 {
+		userActiveStatus = true
+	} else {
+		userActiveStatus = false
+	}
+
+	user.Active = &userActiveStatus
+
 	c.JSON(200, gin.H{
 		"ok":   true,
 		"user": user,

@@ -35,11 +35,6 @@ type UserResponse struct {
 	Reports    []Report   `json:"Reports,omitempty"`
 }
 
-type Profession struct {
-	Role_id int    `json:"Role_id"`
-	Title   string `json:"Title"`
-}
-
 func GenerateUserHash(id int) (*string, error) {
 
 	user, err := GetUserByID(id)

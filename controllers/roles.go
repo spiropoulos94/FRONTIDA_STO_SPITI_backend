@@ -8,7 +8,7 @@ import (
 )
 
 func ListRoles(c *gin.Context) {
-	var roles []models.Role
+	var roles []models.Profession
 	roles, err := models.GetAllRoles()
 	if err != nil {
 		ErrorJSON(c, err.Error())

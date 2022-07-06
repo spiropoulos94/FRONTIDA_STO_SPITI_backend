@@ -162,7 +162,7 @@ func CompleteSignUp(c *gin.Context) {
 	}
 
 	var availableServices []models.Service
-	var availableRoles []models.Role
+	var availableRoles []models.Profession
 
 	if dbUser.Profession.Role_id == 1 {
 		availableServices, err = models.GetAllServices()
@@ -284,7 +284,7 @@ func Login(c *gin.Context) {
 		}
 
 		var availableServices []models.Service
-		var availableRoles []models.Role
+		var availableRoles []models.Profession
 
 		if dbUser.Profession.Role_id == 1 {
 			availableServices, err = models.GetAllServices()

@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	b64 "encoding/base64"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -167,25 +166,9 @@ func AdminCreateUser(c *gin.Context) {
 		return
 	}
 
-	encodedFields := make(map[string]interface{})
+	newUser.Profession = *newUserProfession
 
-	encodedFields["ID"] = newUserID
-	encodedFields["Name"] = newUser.Name
-	encodedFields["Surname"] = newUser.Surname
-	encodedFields["AFM"] = newUser.AFM
-	encodedFields["AMKA"] = newUser.AMKA
-	encodedFields["Profession"] = newUserProfession
-
-	fmt.Println(encodedFields)
-	fmt.Println("--------")
-	jsonByteSlice, err := json.Marshal(encodedFields)
-	if err != nil {
-		fmt.Println("err while marshal: ", err)
-	}
-
-	stringifiedJSON := string(jsonByteSlice)
-
-	encodedStr := b64.StdEncoding.EncodeToString([]byte(stringifiedJSON))
+	encodedStr, err := models.UserToHashString(&newUser)
 
 	c.JSON(200, gin.H{
 		"ok":                    true,

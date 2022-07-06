@@ -109,7 +109,8 @@ func FindUser(c *gin.Context) {
 	}
 
 	c.JSON(200, gin.H{
-		"users": user,
+		"ok":   true,
+		"user": user,
 	})
 
 }

@@ -177,9 +177,14 @@ func AdminCreateUser(c *gin.Context) {
 		return
 	}
 
+	newUser.User_id = int(newUserID)
 	newUser.Profession = *newUserProfession
 
 	encodedStr, err := models.UserToHashString(&newUser)
+	if err != nil {
+		ErrorJSON(c, err.Error())
+		return
+	}
 
 	c.JSON(200, gin.H{
 		"ok":                    true,

@@ -176,7 +176,7 @@ func CompleteSignUp(c *gin.Context) {
 			return
 		}
 	} else {
-		availableServices, err = models.GetServicesByUserId(dbUser.User_id)
+		availableServices, err = models.GetServicesByRoleId(dbUser.Profession.Role_id)
 		if err != nil {
 			ErrorJSON(c, err.Error())
 			return
@@ -288,9 +288,17 @@ func Login(c *gin.Context) {
 
 		if dbUser.Profession.Role_id == 1 {
 			availableServices, err = models.GetAllServices()
+			if err != nil {
+				ErrorJSON(c, err.Error())
+				return
+			}
 			availableRoles, err = models.GetAllRoles()
+			if err != nil {
+				ErrorJSON(c, err.Error())
+				return
+			}
 		} else {
-			availableServices, err = models.GetServicesByUserId(dbUser.User_id)
+			availableServices, err = models.GetServicesByRoleId(dbUser.Profession.Role_id)
 		}
 
 		if err != nil {

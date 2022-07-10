@@ -188,7 +188,7 @@ func AdminCreateUser(c *gin.Context) {
 
 	c.JSON(200, gin.H{
 		"ok":                    true,
-		"rows affected":         newUserID,
+		"newUserID":             newUserID,
 		"message":               "User added",
 		"encodedFields(base64)": encodedStr,
 	})

@@ -49,3 +49,20 @@ func ListUserReports(c *gin.Context) {
 		"reports": userReports,
 	})
 }
+
+func CreateReport(c *gin.Context) {
+
+	// create Report from models.CreateReport
+	// newReportID, err := models.CreateReport(UserID,PatientID, ReportContent, ArrivalTime, DepartureTime, AbscenceStatus)
+
+	// if err != nil {
+	// 	ErrorJSON(c, err.Error())
+	// 	return
+	// }
+
+	// c.JSON(200, gin.H{
+	// 	"ok":                    true,
+	// 	"":         newUserID,
+	// 	"message":               "User added",
+	// })
+}

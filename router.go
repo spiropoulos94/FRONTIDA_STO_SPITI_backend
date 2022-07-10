@@ -34,6 +34,7 @@ func SetupRouter() {
 	reportGroup := router.Group("/reports", CheckHeaderForJWT())
 	{
 		reportGroup.GET("/all", CheckIfUserIsAdmin(), controllers.ListAllReports)
+		reportGroup.POST("/", controllers.CreateReport)
 		// reportGroup.GET("/", controllers.ListAvailableReports)
 	}
 

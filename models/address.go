@@ -39,3 +39,24 @@ func SaveAddress(street string, number int, city string, postalCode int) (int64,
 
 	}
 }
+
+func DeleteAdress(addressID int) (bool, error) {
+	stmt, err := utils.DB.Prepare("Delete from Addresses where id = ?")
+	if err != nil {
+		return false, err
+	}
+
+	defer stmt.Close()
+
+	res, err := stmt.Exec(addressID)
+	if err != nil {
+		return false, err
+	}
+
+	rowsAffected, err := res.RowsAffected()
+	if err != nil {
+		return false, err
+	}
+
+	return rowsAffected > 0, nil
+}

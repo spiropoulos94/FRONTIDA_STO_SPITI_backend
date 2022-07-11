@@ -43,10 +43,13 @@ func GetPatientByAMKA(amka int) (*Patient, error) {
 func SavePatient(patient Patient) (int64, error) {
 	// create patient address before creating Patient
 
+	fmt.Println("* Begining to save patient")
+
 	addressID, err := SaveAddress(patient.Address.Street, patient.Address.Number, patient.Address.City, patient.Address.PostalCode)
 	if err != nil {
 		return 0, err
 	}
+	fmt.Println("* Patient address saved succesfully! ")
 
 	stmt, err := utils.DB.Prepare("INSERT INTO Patients ( Fullname, Patient_AMKA, Health_security, Address_id) VALUES( ?, ?, ?, ? )")
 	if err != nil {
@@ -57,8 +60,13 @@ func SavePatient(patient Patient) (int64, error) {
 	res, err := stmt.Exec(patient.Fullname, patient.Patient_AMKA, patient.HealthSecurity, addressID)
 	if err != nil {
 		// if patient fails to be saved, erase his address to prevent bloated database
-		fmt.Println(err)
-		return -1, err
+		fmt.Println("failed to create patient")
+		_, err := DeleteAdress(int(addressID))
+		if err != nil {
+			fmt.Println("Failed to delte address")
+			return -1, err
+		}
+
 	}
 
 	newPatientID, err := res.LastInsertId()

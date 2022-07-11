@@ -59,8 +59,6 @@ func CreateReport(c *gin.Context) {
 	report := models.Report{}
 	json.Unmarshal(jsonData, &report)
 
-	fmt.Printf("%+v\n", report)
-
 	// check if patient already exists
 	patient, err := models.GetPatientByAMKA(report.Patient.Patient_AMKA)
 

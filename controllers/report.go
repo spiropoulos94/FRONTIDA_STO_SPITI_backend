@@ -60,9 +60,9 @@ func CreateReport(c *gin.Context) {
 	// 	return
 	// }
 
-	// c.JSON(200, gin.H{
-	// 	"ok":                    true,
-	// 	"":         newUserID,
-	// 	"message":               "User added",
-	// })
+	c.JSON(200, gin.H{
+		"ok": true,
+		// "":         newUserID,
+		"message": "Report Created",
+	})
 }

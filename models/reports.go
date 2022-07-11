@@ -7,8 +7,8 @@ import (
 
 type Report struct {
 	Report_id      int     `json:"Report_id"`         // ok
-	Author         Author  `json:"Author"`            // ase ayta gia to telos
-	Patient        Patient `json:"Patient"`           // ase ayta gia to telos
+	Author         Author  `json:"Author,omitempty"`  // ase ayta gia to telos
+	Patient        Patient `json:"Patient,omitempty"` // ase ayta gia to telos
 	ReportContent  string  `json:"Report_content"`    // ok
 	ReportDate     int     `json:"Report_Date_ts"`    // ok
 	ArrivalTime    int     `json:"Arrival_Time_ts"`   // ok

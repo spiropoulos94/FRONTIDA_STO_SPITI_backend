@@ -6,15 +6,15 @@ import (
 )
 
 type Report struct {
-	Report_id      int     `json:"Report_id"`        // ok
-	Author         Author  `json:"Author,omitempty"` // ase ayta gia to telos
-	User_id        int     `json:"User_id,omitempty"`
-	Patient        Patient `json:"Patient,omitempty"` // ase ayta gia to telos
-	Patient_id     int     `json:"Patient_id,omitempty"`
-	ReportContent  string  `json:"Report_content"`    // ok
-	ArrivalTime    int     `json:"Arrival_Time_ts"`   // ok
-	DepartureTime  int     `json:"Departure_Time_ts"` // ok
-	AbscenceStatus bool    `json:"Absence_Status"`    // ok
+	Report_id int     `json:"Report_id"`        // ok
+	Author    Author  `json:"Author,omitempty"` // ase ayta gia to telos
+	User_id   int     `json:"User_id,omitempty"`
+	Patient   Patient `json:"Patient,omitempty"` // ase ayta gia to telos
+	// Patient_id     int     `json:"Patient_id,omitempty"`
+	ReportContent  string `json:"Report_content"`    // ok
+	ArrivalTime    int    `json:"Arrival_Time_ts"`   // ok
+	DepartureTime  int    `json:"Departure_Time_ts"` // ok
+	AbscenceStatus bool   `json:"Absence_Status"`    // ok
 }
 
 type UserReportResponse struct {
@@ -32,22 +32,6 @@ type Author struct {
 	Name       string     `json:"Name"`       // ok
 	Surname    string     `json:"Surname"`    // ok
 	Profession Profession `json:"Profession"` // ok
-}
-
-type Patient struct {
-	Patient_id     int     `json:"Patient_id"`
-	Fullname       string  `json:"Fullname"`
-	Patient_AMKA   int     `json:"Patient_AMKA"`
-	HealthSecurity bool    `json:"Health_security"`
-	Address        Address `json:"Address"`
-}
-
-type Address struct {
-	Address_id int    `json:"Address_id"`
-	Street     string `json:"Street"`
-	Number     int    `json:"Number"`
-	City       string `json:"City"`
-	PostalCode int    `json:"Postal_code"`
 }
 
 func GetAllReports() ([]Report, error) {

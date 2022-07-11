@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"spiropoulos94/FRONTIDA_STO_SPITI_backend/models"
 	"strconv"
@@ -58,17 +59,32 @@ func CreateReport(c *gin.Context) {
 	report := models.Report{}
 	json.Unmarshal(jsonData, &report)
 
-	// create Report from models.SaveReport
-	newReportID, err := models.SaveReport(report.User_id, report.Patient_id, report.ReportContent, report.ArrivalTime, report.DepartureTime, report.AbscenceStatus)
+	fmt.Printf("%+v\n", report)
+
+	// check if patient already exists
+	patient, err := models.GetPatientByAMKA(report.Patient.Patient_AMKA)
 
 	if err != nil {
-		ErrorJSON(c, err.Error())
-		return
+		if err.Error() == "404" {
+			fmt.Println("Patient does not exist, will create one")
+			createdPatientID, _ := models.SavePatient(report.Patient)
+			fmt.Println("CREATED PATIENT ID =>", createdPatientID)
+		}
 	}
 
+	fmt.Println("patient => ", patient)
+
+	// // create Report from models.SaveReport
+	// newReportID, err := models.SaveReport(report.User_id, report.Patient_id, report.ReportContent, report.ArrivalTime, report.DepartureTime, report.AbscenceStatus)
+
+	// if err != nil {
+	// 	ErrorJSON(c, err.Error())
+	// 	return
+	// }
+
 	c.JSON(200, gin.H{
-		"ok":          true,
-		"newReportID": newReportID,
-		"message":     "Report Created",
+		"ok": true,
+		// "newReportID": newReportID,
+		"message": "Report Created",
 	})
 }

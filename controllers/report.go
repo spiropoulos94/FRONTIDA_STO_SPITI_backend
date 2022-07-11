@@ -1,6 +1,8 @@
 package controllers
 
 import (
+	"encoding/json"
+	"io/ioutil"
 	"spiropoulos94/FRONTIDA_STO_SPITI_backend/models"
 	"strconv"
 
@@ -52,8 +54,12 @@ func ListUserReports(c *gin.Context) {
 
 func CreateReport(c *gin.Context) {
 
+	jsonData, _ := ioutil.ReadAll(c.Request.Body)
+	report := models.Report{}
+	json.Unmarshal(jsonData, &report)
+
 	// create Report from models.SaveReport
-	newReportID, err := models.SaveReport(UserID, PatientID, ReportContent, ArrivalTime, DepartureTime, AbscenceStatus)
+	newReportID, err := models.SaveReport(report.User_id, report.Patient_id, report.ReportContent, report.ArrivalTime, report.DepartureTime, report.AbscenceStatus)
 
 	if err != nil {
 		ErrorJSON(c, err.Error())
@@ -61,8 +67,8 @@ func CreateReport(c *gin.Context) {
 	}
 
 	c.JSON(200, gin.H{
-		"ok": true,
-		// "":         newUserID,
-		"message": "Report Created",
+		"ok":          true,
+		"newReportID": newReportID,
+		"message":     "Report Created",
 	})
 }

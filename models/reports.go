@@ -6,11 +6,12 @@ import (
 )
 
 type Report struct {
-	Report_id      int     `json:"Report_id"`         // ok
-	Author         Author  `json:"Author,omitempty"`  // ase ayta gia to telos
+	Report_id      int     `json:"Report_id"`        // ok
+	Author         Author  `json:"Author,omitempty"` // ase ayta gia to telos
+	User_id        int     `json:"User_id,omitempty"`
 	Patient        Patient `json:"Patient,omitempty"` // ase ayta gia to telos
+	Patient_id     int     `json:"Patient_id,omitempty"`
 	ReportContent  string  `json:"Report_content"`    // ok
-	ReportDate     int     `json:"Report_Date_ts"`    // ok
 	ArrivalTime    int     `json:"Arrival_Time_ts"`   // ok
 	DepartureTime  int     `json:"Departure_Time_ts"` // ok
 	AbscenceStatus bool    `json:"Absence_Status"`    // ok
@@ -54,7 +55,7 @@ func GetAllReports() ([]Report, error) {
 	var reports []Report
 
 	// se ayto to query enwse reports, users kai patients gia na pareis ta data
-	stmt, err := utils.DB.Prepare("SELECT Daily_Reports.Report_id, Daily_Reports.Report_content, Daily_Reports.Report_Date_ts, Daily_Reports.Arrival_Time_ts, Daily_Reports.Departure_Time_ts, Daily_Reports.Absence_Status, Users.User_id, Users.Name, Users.Surname, Roles.Role_id, Roles.Title, Patients.Patient_id, Patients.Fullname, Patients.Patient_AMKA, Patients.Health_security, Addresses.Address_id, Addresses.Street, Addresses.Number, Addresses.City, Addresses.Postal_code   FROM Daily_Reports LEFT JOIN Roles ON Daily_Reports.User_id = Roles.Role_id	LEFT JOIN Users ON Daily_Reports.User_id = Users.User_id LEFT JOIN Patients ON Daily_Reports.Patient_id = Patients.Patient_id LEFT JOIN Addresses ON Patients.Address_id = Addresses.Address_id ;")
+	stmt, err := utils.DB.Prepare("SELECT Daily_Reports.Report_id, Daily_Reports.Report_content, Daily_Reports.Arrival_Time_ts, Daily_Reports.Departure_Time_ts, Daily_Reports.Absence_Status, Users.User_id, Users.Name, Users.Surname, Roles.Role_id, Roles.Title, Patients.Patient_id, Patients.Fullname, Patients.Patient_AMKA, Patients.Health_security, Addresses.Address_id, Addresses.Street, Addresses.Number, Addresses.City, Addresses.Postal_code   FROM Daily_Reports LEFT JOIN Roles ON Daily_Reports.User_id = Roles.Role_id	LEFT JOIN Users ON Daily_Reports.User_id = Users.User_id LEFT JOIN Patients ON Daily_Reports.Patient_id = Patients.Patient_id LEFT JOIN Addresses ON Patients.Address_id = Addresses.Address_id ;")
 	if err != nil {
 		return nil, err
 	}
@@ -73,7 +74,7 @@ func GetAllReports() ([]Report, error) {
 		var profession Profession
 		var address Address
 
-		if err := rows.Scan(&report.Report_id, &report.ReportContent, &report.ReportDate, &report.ArrivalTime, &report.DepartureTime, &report.AbscenceStatus, &author.User_id, &author.Name, &author.Surname, &profession.Role_id, &profession.Title, &patient.Patient_id, &patient.Fullname, &patient.Patient_AMKA, &patient.HealthSecurity, &address.Address_id, &address.Street, &address.Number, &address.City, &address.PostalCode); err != nil {
+		if err := rows.Scan(&report.Report_id, &report.ReportContent, &report.ArrivalTime, &report.DepartureTime, &report.AbscenceStatus, &author.User_id, &author.Name, &author.Surname, &profession.Role_id, &profession.Title, &patient.Patient_id, &patient.Fullname, &patient.Patient_AMKA, &patient.HealthSecurity, &address.Address_id, &address.Street, &address.Number, &address.City, &address.PostalCode); err != nil {
 			fmt.Println("err", err)
 			return nil, err
 		}
@@ -141,8 +142,9 @@ func GetUserReports(userID int) ([]UserReportResponse, error) {
 	return userReports, nil
 }
 
-func SaveReport() (userID int, patientID int, reportContent string, arrivalTime int, departureTime int, abscenceStatus bool ) (int, error) {
-	stmt, err := utils.DB.Prepare("INSERT INTO Daily_Reports ( User_id, Patient_id, Report_Content, Arrival_Time_ts, Departure_Time_ts, Abscence_Status Role_id) VALUES( ?, ?, ?, ?, ?, ? )")
+func SaveReport(userID int, patientID int, reportContent string, arrivalTime int, departureTime int, abscenceStatus bool) (int, error) {
+	stmt, err := utils.DB.Prepare("INSERT INTO Daily_Reports ( User_id, Patient_id, Report_Content, Arrival_Time_ts, Departure_Time_ts, Absence_Status ) VALUES( ?, ?, ?, ?, ?, ? )")
+
 	if err != nil {
 		return -1, err
 	}
@@ -165,6 +167,6 @@ func SaveReport() (userID int, patientID int, reportContent string, arrivalTime 
 		fmt.Println("Rows affected,", numberOfRowsAffected)
 		return -1, err
 	} else {
-		return newReportID, nil
+		return int(newReportID), nil
 	}
 }

@@ -140,3 +140,31 @@ func GetUserReports(userID int) ([]UserReportResponse, error) {
 
 	return userReports, nil
 }
+
+func SaveReport() (userID int, patientID int, reportContent string, arrivalTime int, departureTime int, abscenceStatus bool ) (int, error) {
+	stmt, err := utils.DB.Prepare("INSERT INTO Daily_Reports ( User_id, Patient_id, Report_Content, Arrival_Time_ts, Departure_Time_ts, Abscence_Status Role_id) VALUES( ?, ?, ?, ?, ?, ? )")
+	if err != nil {
+		return -1, err
+	}
+
+	defer stmt.Close()
+
+	res, err := stmt.Exec(userID, patientID, reportContent, arrivalTime, departureTime, abscenceStatus)
+	if err != nil {
+		return 0, err
+	}
+
+	newReportID, err := res.LastInsertId()
+	if err != nil {
+		return -1, err
+	}
+	if err != nil {
+		return -1, err
+	}
+	if numberOfRowsAffected, err := res.RowsAffected(); err != nil {
+		fmt.Println("Rows affected,", numberOfRowsAffected)
+		return -1, err
+	} else {
+		return newReportID, nil
+	}
+}

@@ -52,13 +52,13 @@ func ListUserReports(c *gin.Context) {
 
 func CreateReport(c *gin.Context) {
 
-	// create Report from models.CreateReport
-	// newReportID, err := models.CreateReport(UserID,PatientID, ReportContent, ArrivalTime, DepartureTime, AbscenceStatus)
+	// create Report from models.SaveReport
+	newReportID, err := models.SaveReport(UserID, PatientID, ReportContent, ArrivalTime, DepartureTime, AbscenceStatus)
 
-	// if err != nil {
-	// 	ErrorJSON(c, err.Error())
-	// 	return
-	// }
+	if err != nil {
+		ErrorJSON(c, err.Error())
+		return
+	}
 
 	c.JSON(200, gin.H{
 		"ok": true,

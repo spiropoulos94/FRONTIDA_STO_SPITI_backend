@@ -13,35 +13,35 @@ type Address struct {
 	PostalCode int    `json:"Postal_code"`
 }
 
-func SaveAddress(street string, number int, city string, postalCode int) (int64, error) {
+func SaveAddress(street string, number int, city string, postalCode int) (*int64, error) {
 	stmt, err := utils.DB.Prepare("INSERT INTO Addresses ( Street, Number, City, Postal_code) VALUES( ?, ?, ?, ? )")
 	if err != nil {
-		return 0, err
+		return nil, err
 	}
 	defer stmt.Close()
 
 	res, err := stmt.Exec(street, number, city, postalCode)
 	if err != nil {
-		return -1, err
+		return nil, err
 	}
 
 	newAdressID, err := res.LastInsertId()
 	if err != nil {
-		return -1, err
+		return nil, err
 	}
 
 	if numberOfRowsAffected, err := res.RowsAffected(); err != nil {
 		fmt.Println("Rows affected,", numberOfRowsAffected)
-		return 0, err
+		return nil, err
 	} else {
 
-		return newAdressID, nil
+		return &newAdressID, nil
 
 	}
 }
 
 func DeleteAdress(addressID int) (bool, error) {
-	stmt, err := utils.DB.Prepare("Delete from Addresses where id = ?")
+	stmt, err := utils.DB.Prepare("Delete from Addresses where Address_id = ?")
 	if err != nil {
 		return false, err
 	}

@@ -55,6 +55,15 @@ func ListUserReports(c *gin.Context) {
 
 func CreateReport(c *gin.Context) {
 
+	fmt.Println("-- CREATE REPORT CONTROLLER RUN")
+
+	// err := errors.New("test error")
+	// ErrorJSON(c, err.Error())
+	// return
+
+	var createdPatientID *int64
+	var createdAddressID *int64
+
 	jsonData, _ := ioutil.ReadAll(c.Request.Body)
 	report := models.Report{}
 	json.Unmarshal(jsonData, &report)
@@ -62,15 +71,23 @@ func CreateReport(c *gin.Context) {
 	// check if patient already exists
 	patient, err := models.GetPatientByAMKA(report.Patient.Patient_AMKA)
 
-	if err != nil {
-		if err.Error() == "404" {
-			fmt.Println("Patient does not exist, will create one")
-			createdPatientID, _ := models.SavePatient(report.Patient)
-			fmt.Println("CREATED PATIENT ID =>", createdPatientID)
+	if patient == nil || err != nil {
+		createdAddressID, err = models.SaveAddress(report.Patient.Address.Street, report.Patient.Address.Number, report.Patient.Address.City, report.Patient.Address.PostalCode)
+		if err != nil {
+			ErrorJSON(c, err.Error())
+			return
 		}
-	}
 
-	fmt.Println("patient => ", patient)
+		report.Patient.Address.Address_id = int(*createdAddressID)
+
+		createdPatientID, err = models.SavePatient(report.Patient)
+		if err != nil {
+			models.DeleteAdress(int(patient.Address.Address_id))
+			ErrorJSON(c, err.Error())
+			return
+		}
+
+	}
 
 	// // create Report from models.SaveReport
 	// newReportID, err := models.SaveReport(report.User_id, report.Patient_id, report.ReportContent, report.ArrivalTime, report.DepartureTime, report.AbscenceStatus)
@@ -81,8 +98,9 @@ func CreateReport(c *gin.Context) {
 	// }
 
 	c.JSON(200, gin.H{
-		"ok": true,
-		// "newReportID": newReportID,
-		"message": "Report Created",
+		"ok":           true,
+		"newPatientID": createdPatientID,
+		"newAddressID": createdAddressID,
+		"message":      "Report Created",
 	})
 }

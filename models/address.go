@@ -6,7 +6,7 @@ import (
 )
 
 type Address struct {
-	Address_id int    `json:"Address_id"`
+	Address_id int64  `json:"Address_id"`
 	Street     string `json:"Street"`
 	Number     int    `json:"Number"`
 	City       string `json:"City"`

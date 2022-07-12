@@ -57,12 +57,8 @@ func CreateReport(c *gin.Context) {
 
 	fmt.Println("-- CREATE REPORT CONTROLLER RUN")
 
-	// err := errors.New("test error")
-	// ErrorJSON(c, err.Error())
-	// return
-
-	var createdPatientID *int64
-	var createdAddressID *int64
+	var patientID *int64
+	var addressID *int64
 
 	jsonData, _ := ioutil.ReadAll(c.Request.Body)
 	report := models.Report{}
@@ -73,28 +69,37 @@ func CreateReport(c *gin.Context) {
 		return
 	}
 
-	// check if patient already exists
-	patient, err := models.GetPatientByAMKA(report.Patient.Patient_AMKA)
+	// check if dbPatient already exists
+	dbPatient, err := models.GetPatientByAMKA(report.Patient.Patient_AMKA)
 
-	if patient == nil || err != nil {
-		createdAddressID, err = models.SaveAddress(report.Patient.Address.Street, report.Patient.Address.Number, report.Patient.Address.City, report.Patient.Address.PostalCode)
+	if dbPatient == nil || err != nil {
+		addressID, err = models.SaveAddress(report.Patient.Address.Street, report.Patient.Address.Number, report.Patient.Address.City, report.Patient.Address.PostalCode)
 		if err != nil {
 			ErrorJSON(c, err.Error())
 			return
 		}
 
-		report.Patient.Address.Address_id = int(*createdAddressID)
+		report.Patient.Address.Address_id = *addressID
 
-		createdPatientID, err = models.SavePatient(report.Patient)
+		patientID, err = models.SavePatient(report.Patient)
 		if err != nil {
-			models.DeleteAdress(int(patient.Address.Address_id))
+			models.DeleteAdress(int(dbPatient.Address.Address_id))
 			ErrorJSON(c, err.Error())
 			return
 		}
+	} else {
+		patientID = &dbPatient.Patient_id
+		addressID = &dbPatient.Address.Address_id
 	}
 
-	fmt.Println("patient id =>", report.Patient.Patient_id)
-	fmt.Println("created patient id =>", createdPatientID)
+	if patientID != nil {
+		fmt.Println("dbPatient id =>", *patientID)
+		fmt.Println("dbPatient address id =>", *addressID)
+		fmt.Println("dbPatient id =>", *patientID)
+		fmt.Println("dbPatient address id =>", *addressID)
+		fmt.Println("dbPatient id =>", *patientID)
+		fmt.Println("dbPatient address id =>", *addressID)
+	}
 
 	// // create Report from models.SaveReport
 	// newReportID, err := models.SaveReport(report.User_id, report.Patient_id, report.ReportContent, report.ArrivalTime, report.DepartureTime, report.AbscenceStatus)
@@ -105,9 +110,9 @@ func CreateReport(c *gin.Context) {
 	// }
 
 	c.JSON(200, gin.H{
-		"ok":           true,
-		"newPatientID": createdPatientID,
-		"newAddressID": createdAddressID,
-		"message":      "Report Created",
+		"ok":        true,
+		"PatientID": patientID,
+		"AddressID": addressID,
+		"message":   "Report Created",
 	})
 }

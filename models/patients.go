@@ -8,7 +8,7 @@ import (
 )
 
 type Patient struct {
-	Patient_id     int     `json:"Patient_id"`
+	Patient_id     int64   `json:"Patient_id"`
 	Fullname       string  `json:"Fullname"`
 	Patient_AMKA   int     `json:"Patient_AMKA"`
 	HealthSecurity bool    `json:"Health_security"`

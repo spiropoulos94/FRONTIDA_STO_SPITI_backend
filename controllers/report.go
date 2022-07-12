@@ -79,6 +79,7 @@ func CreateReport(c *gin.Context) {
 	}
 
 	if dbPatient == nil {
+		//if patient does not exist make him and his address
 		addressID, err := models.SaveAddress(report.Patient.Address.Street, report.Patient.Address.Number, report.Patient.Address.City, report.Patient.Address.PostalCode)
 		if err != nil {
 			ErrorJSON(c, err.Error())
@@ -98,14 +99,12 @@ func CreateReport(c *gin.Context) {
 		addressID = &dbPatient.Address.Address_id
 	}
 
-	if patientID != nil {
-		fmt.Println("dbPatient id =>", *patientID)
-		fmt.Println("dbPatient address id =>", *addressID)
-		fmt.Println("dbPatient id =>", *patientID)
-		fmt.Println("dbPatient address id =>", *addressID)
-		fmt.Println("dbPatient id =>", *patientID)
-		fmt.Println("dbPatient address id =>", *addressID)
-	}
+	fmt.Println("dbPatient id =>", *patientID)
+	fmt.Println("dbPatient address id =>", *addressID)
+	fmt.Println("dbPatient id =>", *patientID)
+	fmt.Println("dbPatient address id =>", *addressID)
+	fmt.Println("dbPatient id =>", *patientID)
+	fmt.Println("dbPatient address id =>", *addressID)
 
 	// // create Report from models.SaveReport
 	// newReportID, err := models.SaveReport(report.User_id, report.Patient_id, report.ReportContent, report.ArrivalTime, report.DepartureTime, report.AbscenceStatus)

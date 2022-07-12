@@ -68,6 +68,11 @@ func CreateReport(c *gin.Context) {
 	report := models.Report{}
 	json.Unmarshal(jsonData, &report)
 
+	if report.Patient.Patient_AMKA == 0 || report.Patient.Patient_AMKA > 999999999 {
+		ErrorJSON(c, "Use a valid AMKA")
+		return
+	}
+
 	// check if patient already exists
 	patient, err := models.GetPatientByAMKA(report.Patient.Patient_AMKA)
 
@@ -86,8 +91,10 @@ func CreateReport(c *gin.Context) {
 			ErrorJSON(c, err.Error())
 			return
 		}
-
 	}
+
+	fmt.Println("patient id =>", report.Patient.Patient_id)
+	fmt.Println("created patient id =>", createdPatientID)
 
 	// // create Report from models.SaveReport
 	// newReportID, err := models.SaveReport(report.User_id, report.Patient_id, report.ReportContent, report.ArrivalTime, report.DepartureTime, report.AbscenceStatus)

@@ -1,8 +1,6 @@
 package models
 
 import (
-	"database/sql"
-	"errors"
 	"fmt"
 	"spiropoulos94/FRONTIDA_STO_SPITI_backend/utils"
 )
@@ -30,9 +28,9 @@ func GetPatientByAMKA(amka int) (*Patient, error) {
 	err = row.Scan(&patient.Patient_id, &patient.Fullname, &patient.Patient_AMKA, &patient.HealthSecurity, &patient.Address.Street, &patient.Address.Number, &patient.Address.City, &patient.Address.PostalCode)
 
 	if err != nil {
-		if err == sql.ErrNoRows {
-			err = errors.New("404 patient does not exist")
-		}
+		// if err == sql.ErrNoRows {
+		// 	// err = errors.New("404")
+		// }
 		return nil, err
 	}
 

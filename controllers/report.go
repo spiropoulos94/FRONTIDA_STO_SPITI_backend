@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"database/sql"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -72,8 +73,13 @@ func CreateReport(c *gin.Context) {
 	// check if dbPatient already exists
 	dbPatient, err := models.GetPatientByAMKA(report.Patient.Patient_AMKA)
 
-	if dbPatient == nil || err != nil {
-		addressID, err = models.SaveAddress(report.Patient.Address.Street, report.Patient.Address.Number, report.Patient.Address.City, report.Patient.Address.PostalCode)
+	if err != nil && err != sql.ErrNoRows {
+		ErrorJSON(c, err.Error())
+		return
+	}
+
+	if dbPatient == nil {
+		addressID, err := models.SaveAddress(report.Patient.Address.Street, report.Patient.Address.Number, report.Patient.Address.City, report.Patient.Address.PostalCode)
 		if err != nil {
 			ErrorJSON(c, err.Error())
 			return

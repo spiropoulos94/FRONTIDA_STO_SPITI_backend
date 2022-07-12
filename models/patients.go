@@ -47,6 +47,7 @@ func SavePatient(patient Patient) (*int64, error) {
 	}
 	defer stmt.Close()
 
+	fmt.Println(6)
 	res, err := stmt.Exec(patient.Fullname, patient.Patient_AMKA, patient.HealthSecurity, patient.Address.Address_id)
 	if err != nil {
 		if err != nil {

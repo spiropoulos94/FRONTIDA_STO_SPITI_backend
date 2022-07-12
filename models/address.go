@@ -40,7 +40,7 @@ func SaveAddress(street string, number int, city string, postalCode int) (*int64
 	}
 }
 
-func DeleteAdress(addressID int) (bool, error) {
+func DeleteAdress(addressID int64) (bool, error) {
 	stmt, err := utils.DB.Prepare("Delete from Addresses where Address_id = ?")
 	if err != nil {
 		return false, err

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"spiropoulos94/FRONTIDA_STO_SPITI_backend/utils"
+	"strconv"
 )
 
 type Service struct {
@@ -74,4 +75,52 @@ func GetServicesByRoleId(id int) ([]Service, error) {
 
 	return services, nil
 
+}
+
+func SaveReportServices(reportID int, servicesIDs []int) (*int64, error) {
+
+	queryString := "INSERT INTO Reports_services ( Report_id, Service_id ) VALUES"
+
+	values := make([]interface{}, 0, len(servicesIDs)*2)
+
+	reportIDStr := strconv.Itoa(reportID)
+
+	for i, serviceID := range servicesIDs {
+
+		connectString := ","
+		if i == (len(servicesIDs) - 1) {
+			connectString = ";"
+		}
+
+		values = append(values, reportIDStr, serviceID)
+
+		valuesString := fmt.Sprintf("(?, ?)%s", connectString)
+
+		queryString = queryString + valuesString
+	}
+
+	stmt, err := utils.DB.Prepare(queryString)
+	if err != nil {
+		return nil, err
+	}
+	defer stmt.Close()
+
+	fmt.Println("queryString", queryString)
+	fmt.Println("values", values)
+
+	res, err := stmt.Exec(values...)
+	if err != nil {
+		fmt.Println("edwww")
+		return nil, err
+	}
+
+	numberOfRowsAffected, err := res.RowsAffected()
+	if err != nil {
+		return nil, err
+	}
+
+	fmt.Println("numberOfRowsAffected", numberOfRowsAffected)
+	fmt.Println("numberOfRowsAffected", numberOfRowsAffected)
+
+	return &numberOfRowsAffected, nil
 }

@@ -15,6 +15,7 @@ type Report struct {
 	ArrivalTime    int    `json:"Arrival_Time_ts"`   // ok
 	DepartureTime  int    `json:"Departure_Time_ts"` // ok
 	AbscenceStatus bool   `json:"Absence_Status"`    // ok
+	ServicesIDs    []int  `json:"Services_ids,omitempty"`
 }
 
 type UserReportResponse struct {
@@ -126,7 +127,7 @@ func GetUserReports(userID int) ([]UserReportResponse, error) {
 	return userReports, nil
 }
 
-func SaveReport(userID int, patientID int, reportContent string, arrivalTime int, departureTime int, abscenceStatus bool) (int, error) {
+func SaveReport(userID int, patientID int64, reportContent string, arrivalTime int, departureTime int, abscenceStatus bool) (int, error) {
 	stmt, err := utils.DB.Prepare("INSERT INTO Daily_Reports ( User_id, Patient_id, Report_Content, Arrival_Time_ts, Departure_Time_ts, Absence_Status ) VALUES( ?, ?, ?, ?, ?, ? )")
 
 	if err != nil {

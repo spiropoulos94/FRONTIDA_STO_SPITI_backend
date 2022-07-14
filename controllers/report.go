@@ -100,18 +100,27 @@ func CreateReport(c *gin.Context) {
 		addressID = &dbPatient.Address.Address_id
 	}
 
-	// // create Report from models.SaveReport
-	// newReportID, err := models.SaveReport(report.User_id, report.Patient_id, report.ReportContent, report.ArrivalTime, report.DepartureTime, report.AbscenceStatus)
+	newReportID, err := models.SaveReport(report.User_id, *patientID, report.ReportContent, report.ArrivalTime, report.DepartureTime, report.AbscenceStatus)
 
-	// if err != nil {
-	// 	ErrorJSON(c, err.Error())
-	// 	return
-	// }
+	if err != nil {
+		ErrorJSON(c, err.Error())
+		return
+	}
+
+	// assign report services
+
+	rowsAffected, err := models.SaveReportServices(newReportID, report.ServicesIDs)
+	if err != nil {
+		ErrorJSON(c, err.Error())
+		return
+	}
 
 	c.JSON(200, gin.H{
-		"ok":        true,
-		"PatientID": patientID,
-		"AddressID": addressID,
-		"message":   "Report Created",
+		"ok":                          true,
+		"PatientID":                   patientID,
+		"AddressID":                   addressID,
+		"NewReportID":                 newReportID,
+		"ReportsServicesRowsAffected": rowsAffected,
+		"message":                     "Report Created",
 	})
 }

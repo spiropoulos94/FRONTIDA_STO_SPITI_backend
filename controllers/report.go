@@ -100,6 +100,7 @@ func CreateReport(c *gin.Context) {
 		addressID = &dbPatient.Address.Address_id
 	}
 
+	// save report
 	newReportID, err := models.SaveReport(report.User_id, *patientID, report.ReportContent, report.ArrivalTime, report.DepartureTime, report.AbscenceStatus)
 
 	if err != nil {

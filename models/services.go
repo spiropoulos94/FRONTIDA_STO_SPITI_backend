@@ -105,12 +105,8 @@ func SaveReportServices(reportID int, servicesIDs []int) (*int64, error) {
 	}
 	defer stmt.Close()
 
-	fmt.Println("queryString", queryString)
-	fmt.Println("values", values)
-
 	res, err := stmt.Exec(values...)
 	if err != nil {
-		fmt.Println("edwww")
 		return nil, err
 	}
 
@@ -118,9 +114,6 @@ func SaveReportServices(reportID int, servicesIDs []int) (*int64, error) {
 	if err != nil {
 		return nil, err
 	}
-
-	fmt.Println("numberOfRowsAffected", numberOfRowsAffected)
-	fmt.Println("numberOfRowsAffected", numberOfRowsAffected)
 
 	return &numberOfRowsAffected, nil
 }

@@ -40,7 +40,7 @@ func SetupRouter() {
 
 	patientGroup := router.Group("/patients", CheckHeaderForJWT())
 	{
-		patientGroup.GET("/", CheckIfUserIsAdmin(), controllers.ListPatients)
+		patientGroup.GET("/", controllers.ListPatients)
 		// reportGroup.GET("/", controllers.ListAvailableReports)
 	}
 

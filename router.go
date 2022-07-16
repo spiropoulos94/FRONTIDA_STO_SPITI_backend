@@ -38,6 +38,12 @@ func SetupRouter() {
 		// reportGroup.GET("/", controllers.ListAvailableReports)
 	}
 
+	patientGroup := router.Group("/patients", CheckHeaderForJWT())
+	{
+		patientGroup.GET("/", CheckIfUserIsAdmin(), controllers.ListPatients)
+		// reportGroup.GET("/", controllers.ListAvailableReports)
+	}
+
 	router.POST("/complete-signup", controllers.CompleteSignUp)
 	router.POST("/login", controllers.Login)
 

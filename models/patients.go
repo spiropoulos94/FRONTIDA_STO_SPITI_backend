@@ -68,3 +68,31 @@ func SavePatient(patient Patient) (*int64, error) {
 		return &newPatientID, nil
 	}
 }
+
+func GetAllPatients() ([]Patient, error) {
+	var patients []Patient
+
+	rows, err := utils.DB.Query("SELECT Patient_id, Fullname, Patient_AMKA, Health_security, Addresses.Address_id, Street, Number, City, Postal_code FROM `Patients` LEFT JOIN Addresses on Patients.Address_id = Addresses.Address_id;")
+	if err != nil {
+		fmt.Println("error => ", err)
+		return nil, err
+	}
+	defer rows.Close()
+	// Loop through rows, using Scan to assign column data to struct fields.
+	for rows.Next() {
+		var patient Patient
+
+		if err := rows.Scan(&patient.Patient_id, &patient.Fullname, &patient.Patient_AMKA, &patient.HealthSecurity, &patient.Address.Address_id, &patient.Address.Street, &patient.Address.Number, &patient.Address.City, &patient.Address.PostalCode); err != nil {
+			fmt.Println("err", err)
+			return nil, err
+		}
+		patients = append(patients, patient)
+	}
+
+	if err := rows.Err(); err != nil {
+		fmt.Println("err", err)
+		return nil, err
+	}
+
+	return patients, nil
+}

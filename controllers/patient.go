@@ -17,7 +17,7 @@ func ListPatients(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"roles": patients,
-		"ok":    true,
+		"patients": patients,
+		"ok":       true,
 	})
 }

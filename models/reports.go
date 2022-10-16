@@ -40,7 +40,7 @@ func GetAllReports() ([]Report, error) {
 	var reports []Report
 
 	// se ayto to query enwse reports, users kai patients gia na pareis ta data
-	stmt, err := utils.DB.Prepare("SELECT Daily_Reports.Report_id, Daily_Reports.Report_content, Daily_Reports.Arrival_Time_ts, Daily_Reports.Departure_Time_ts, Daily_Reports.Absence_Status, Users.User_id, Users.Name, Users.Surname, Roles.Role_id, Roles.Title, Patients.Patient_id, Patients.Fullname, Patients.Patient_AMKA, Patients.Health_security, Addresses.Address_id, Addresses.Street, Addresses.Number, Addresses.City, Addresses.Postal_code   FROM Daily_Reports LEFT JOIN Roles ON Daily_Reports.User_id = Roles.Role_id	LEFT JOIN Users ON Daily_Reports.User_id = Users.User_id LEFT JOIN Patients ON Daily_Reports.Patient_id = Patients.Patient_id LEFT JOIN Addresses ON Patients.Address_id = Addresses.Address_id ;")
+	stmt, err := utils.DB.Prepare("SELECT Daily_Reports.Report_id, Daily_Reports.Report_content, Daily_Reports.Arrival_Time_ts, Daily_Reports.Departure_Time_ts, Daily_Reports.Absence_Status, Users.User_id, Users.Name, Users.Surname, Users.Role_id, Roles.Title, Patients.Patient_id, Patients.Fullname AS Patient_fullname, Patients.Patient_AMKA, Patients.Health_security, Addresses.Address_id, Addresses.Street, Addresses.Number, Addresses.City, Addresses.Postal_code FROM Daily_Reports LEFT JOIN Users ON Daily_Reports.User_id = Users.User_id LEFT JOIN Roles ON Users.Role_id = Roles.Role_id LEFT JOIN Patients ON Daily_Reports.Patient_id = Patients.Patient_id LEFT JOIN Addresses ON Patients.Address_id = Addresses.Address_id;")
 	if err != nil {
 		return nil, err
 	}

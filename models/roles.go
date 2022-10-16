@@ -47,3 +47,5 @@ func GetRole(professionID int) (*Profession, error) {
 
 	return &role, nil
 }
+
+func GetRolePermissions(roleID int)

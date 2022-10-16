@@ -107,3 +107,24 @@ func CheckIfUserIsAdmin() gin.HandlerFunc {
 	}
 
 }
+
+func ApplyReportsPermissions() gin.HandlerFunc {
+
+	return func(c *gin.Context) {
+		fmt.Println("PRINTING REPORTS PERMISSIONS")
+
+		roleId, exists := c.Get("User_Role_id")
+
+		reqMethod := c.Request.Method
+
+		if exists {
+			fmt.Println("roleId")
+			fmt.Println(roleId)
+			fmt.Println(reqMethod)
+		} else {
+			controllers.ErrorJSON(c, "No role ID found")
+			c.Abort()
+		}
+
+	}
+}

@@ -61,3 +61,15 @@ FROM
     LEFT JOIN Roles ON Daily_Reports.User_id = Roles.Role_id
     LEFT JOIN Users ON Daily_Reports.User_id = Users.User_id
     LEFT JOIN Patients ON Daily_Reports.Patient_id = Patients.Patient_id;
+
+-- selects permission of given role on other roles
+SELECT
+    Reports_Permissions.LoggedUserRole,
+    Reports_permissions.Permission_id,
+    Permissions.Name,
+    Reports_permissions.Report_author_id
+FROM
+    `Reports_permissions`
+    left join Permissions on Reports_permissions.Permission_id = Permissions.Permission_id
+WHERE
+    LoggedUserRole = ?

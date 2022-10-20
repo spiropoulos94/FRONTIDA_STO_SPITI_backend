@@ -2,6 +2,7 @@ package models
 
 import (
 	"fmt"
+	"os"
 	"spiropoulos94/FRONTIDA_STO_SPITI_backend/utils"
 )
 
@@ -48,4 +49,8 @@ func GetRole(professionID int) (*Profession, error) {
 	return &role, nil
 }
 
-func GetRolePermissions(roleID int)
+func GetRolePermissions(roleID int) {
+	fmt.Println("Function running retrieving permissions for specific roles")
+	fmt.Println("Not implemented")
+	os.Exit(123)
+}
